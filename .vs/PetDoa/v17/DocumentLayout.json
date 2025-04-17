@@ -1,0 +1,156 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\gusta\\source\\repos\\PetDoa\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\services\\idonorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\services\\idonorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\controllers\\donorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\controllers\\donorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\services\\donorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\services\\donorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\dtos\\authresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\dtos\\authresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\dtos\\logindonordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\dtos\\logindonordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\services\\serviceresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\services\\serviceresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\util\\passwordvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\util\\passwordvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|c:\\users\\gusta\\source\\repos\\petdoa\\petdoa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C53FD0ED-B9E4-40B9-B19F-D696B1FF774C}|PetDoa\\PetDoa.csproj|solutionrelative:petdoa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IDonorService.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\IDonorService.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Services\\IDonorService.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\IDonorService.cs",
+              "RelativeToolTip": "PetDoa\\Services\\IDonorService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:50:21.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthResult.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\DTOs\\AuthResult.cs",
+              "RelativeDocumentMoniker": "PetDoa\\DTOs\\AuthResult.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\DTOs\\AuthResult.cs",
+              "RelativeToolTip": "PetDoa\\DTOs\\AuthResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:44:36.394Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoginDonorDTO.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\DTOs\\LoginDonorDTO.cs",
+              "RelativeDocumentMoniker": "PetDoa\\DTOs\\LoginDonorDTO.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\DTOs\\LoginDonorDTO.cs",
+              "RelativeToolTip": "PetDoa\\DTOs\\LoginDonorDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:43:49.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ServiceResponse.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\ServiceResponse.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Services\\ServiceResponse.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\ServiceResponse.cs",
+              "RelativeToolTip": "PetDoa\\Services\\ServiceResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:34:24.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PasswordValidator.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Util\\PasswordValidator.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Util\\PasswordValidator.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Util\\PasswordValidator.cs",
+              "RelativeToolTip": "PetDoa\\Util\\PasswordValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:30:42.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DonorController.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Controllers\\DonorController.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Controllers\\DonorController.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Controllers\\DonorController.cs",
+              "RelativeToolTip": "PetDoa\\Controllers\\DonorController.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAIwHQAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:25:52.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Program.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Program.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Program.cs",
+              "RelativeToolTip": "PetDoa\\Program.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwBoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:24:19.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DonorService.cs",
+              "DocumentMoniker": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\DonorService.cs",
+              "RelativeDocumentMoniker": "PetDoa\\Services\\DonorService.cs",
+              "ToolTip": "C:\\Users\\gusta\\source\\repos\\PetDoa\\PetDoa\\Services\\DonorService.cs",
+              "RelativeToolTip": "PetDoa\\Services\\DonorService.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAIwGkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T15:23:06.416Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
