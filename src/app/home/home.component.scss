@@ -1,0 +1,244 @@
+.hero {
+    background: url('../../assets/icons/pets.png') center center no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    color: #fff;
+    position: relative;
+  
+    .hero-content {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      transform: translateY(-70px);
+  
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+  
+      .cta-button {
+        background-color: #f4d35e;
+        color: #004f35;
+        border: none;
+        padding: 0.9rem 1.5rem;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+      }
+    }
+  
+    .hero-image {
+      flex: 1 1 400px;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      min-width: 280px;
+  
+      img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+    }
+  }
+  
+  .como-ajudar {
+    display: flex;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #004f35;
+  
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+      max-width: 300px;
+      flex: 1;
+      text-align: center;
+      transition: transform 0.2s ease-in-out;
+  
+      &:hover {
+        transform: translateY(-5px);
+      }
+  
+      .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #004f35;
+      }
+  
+      h3 {
+        color: #004f35;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+  
+      p {
+        color: #333;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+  
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+  
+        &.amarelo{
+          background-color: #d7ad17;
+          color: #fff;
+        }
+  
+        &.verde {
+          background-color: #004f35;
+          color: #fff;
+        }
+  
+        &:hover {
+          filter: brightness(1.1);
+        }
+      }
+    }
+  }
+  
+  .destaque {
+    background-color: #004f35;
+    color: #fff;
+  
+    .icon {
+      color: #f4d35e;
+    }
+  
+    h3,
+    p {
+      color: #fff;
+    }
+  
+    .btn.vermelho {
+      background-color: #f4d35e;
+      color: #004f35;
+    }
+  }
+
+  .nossa-historia {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 2rem;
+    gap: 2rem;
+    background-color: #fff;
+    min-height: auto;
+    overflow: hidden;
+  
+    .historia-imagem,
+    .historia-conteudo {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  
+    .historia-imagem {
+      position: relative;
+  
+      img {
+        max-height: 600px;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 40% 60% 45% 55% / 55% 45% 55% 45%;
+      }
+  
+      .destaque-resgate {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        background-color: #f4d35e;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        font-weight: bold;
+  
+        strong {
+          font-size: 2rem;
+          display: block;
+          color: #004f35;
+        }
+  
+        span {
+          font-size: 0.9rem;
+          color: #004f35;
+        }
+      }
+    }
+  
+    .historia-conteudo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 450px;
+        padding: 0 1rem;
+      
+        h2 {
+          font-size: 1.8rem;
+          margin-bottom: 0.75rem;
+        }
+      
+        p {
+          font-size: 0.95rem;
+          margin-bottom: 1rem;
+          line-height: 1.5;
+        }
+      
+        ul {
+          margin-bottom: 1.5rem;
+          list-style: none;
+          padding-left: 0;
+      
+          li {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+      
+            i {
+              font-size: 1rem;
+            }
+          }
+        }
+      
+        .btn.roxo {
+            background-color: #004f35;
+            color: #fff;
+            align-self: start; // 👈 botão alinhado à esquerda
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 18px;
+
+          &:hover {
+            background-color: #d7ad17;
+            color: #fff;
+            filter:brightness(1.1)
+          }
+        }
+
+
+      }
+    }
+  
+  
+  
+  

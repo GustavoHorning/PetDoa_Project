@@ -1,0 +1,13 @@
+# Angular/Vite build cache
+.angular/
+dist/
+.vite/
+
+# IDE e sistema
+node_modules/
+*.log
+*.tsbuildinfo
+
+# MacOS e sistema
+.DS_Store
+Thumbs.db
