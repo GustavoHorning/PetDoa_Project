@@ -1,13 +1,35 @@
-# Angular/Vite build cache
+# Diretórios do .NET
+bin/
+obj/
+
+# Diretório do Visual Studio
+.vs/
+
+# Arquivos temporários do Visual Studio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Arquivos de cache e build
+*.cache
+*.pdb
+*.dll
+*.exe
+*.log
+*.tlog
+*.vscode/
+*.ide/
+
+# Diretórios de build do Angular/Vite (caso tenha frontend junto)
 .angular/
 dist/
 .vite/
 
-# IDE e sistema
+# Node.js (caso esteja usando no frontend)
 node_modules/
-*.log
 *.tsbuildinfo
 
-# MacOS e sistema
+# Arquivos de sistema
 .DS_Store
 Thumbs.db
