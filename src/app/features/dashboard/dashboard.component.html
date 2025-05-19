@@ -1,0 +1,45 @@
+<div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-950 text-white p-4">
+      <h2 class="text-xl font-bold mb-6">Petdoa</h2>
+      <nav class="space-y-2 flex flex-col">
+        <a href="#" class="hover:text-green-400">Início</a>
+        <a href="#" class="hover:text-green-400">Doações</a>
+        <a href="#" class="hover:text-green-400">Instituições</a>
+        <a href="#" class="hover:text-green-400">Histórico</a>
+        <a href="#" class="hover:text-green-400">Configurações</a>
+      </nav>      
+    </aside>
+  
+    <!-- Conteúdo principal -->
+    <main class="flex-1 p-6 bg-gray-100">
+      <h1 class="text-2xl font-semibold mb-4">Painel do Usuário</h1>
+  
+      <!-- Cards Resumo -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <app-card-info label="Última Doação" value="R$ 120,00" />
+        <app-card-info label="Total Doado" value="R$ 1.230,00" />
+        <app-card-info label="Instituições Ativas" value="12" />
+      </div>
+  
+      <!-- Lista de Instituições -->
+      <h2 class="text-xl font-semibold mb-2">Instituições</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+       <app-institution-card
+        *ngFor="let inst of institutions"
+        [name]="inst.name"
+        [cause]="inst.cause"
+        (donate)="handleDonation(inst)"
+      ></app-institution-card>
+      </div>
+      <app-donation-modal
+        *ngIf="selectedInstitution"
+        [show]="modalVisible"
+        [name]="selectedInstitution.name"
+        [cause]="selectedInstitution.cause"
+        (close)="handleModalClose()"
+        (confirm)="handleDonationConfirm($event)"
+      ></app-donation-modal>
+    </main>
+  </div>
+  
