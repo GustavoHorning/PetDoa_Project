@@ -1,5 +1,6 @@
-.cadastro-container{
-    max-width: 420px;
+.cadastro-container
+{
+    max-width: 600px;
     margin: 4rem auto;
     background: #ffffff;
     padding: 2.5rem;
@@ -38,12 +39,15 @@
     }
 
     input {
-        padding: 0.9rem 1rem;
+        padding: 1.0rem 3.5rem;
         border: 1px solid #ccc;
-        border-radius: 8px;
+        border-radius: 4px;
         font-size: 1rem;
         font-family: 'Poppins', sans-serif;
         transition: border 0.3s ease;
+        padding-left: 2.8rem;
+        width: 100%;
+        box-sizing: border-box;
 
         &:focus {
             border-color: #004f35;
@@ -69,5 +73,200 @@
             color: #F4D35E;
         }
     }
+
+    .social-login-cadastro { 
+            button.google-btn {
+            background-color: #dd4b39;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%; 
+            margin-bottom: 1rem;
+
+            &:hover {
+                background-color: #c23321;
+            }
+
+            i.fab.fa-google { 
+            margin-right: 8px;
+            }
+        }
+    }
+
+    .social-login-options {
+    margin-bottom: 1.5rem; 
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    }
+
+    .google-signup-btn {
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+
+        background-color: #ffffff; 
+        color: rgba(0, 0, 0, 0.54);
+        border: 1px solid #dadce0; 
+        border-radius: 4px; 
+        padding: 20px 34px; 
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.25px;
+        cursor: pointer;
+        transition: background-color .3s, box-shadow .3s;
+        width: 100%; 
+        min-width: 200px; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+
+        &:hover {
+            background-color: #f8f9fa;
+            border-color: #c6cace;
+            box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+        }
+
+        &:active {
+            background-color: #ebebeb;
+        }
+
+        .google-logo {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px; 
+        }
+    }
+
+    .separator {
+    text-align: center;
+    margin: 1rem 0;
+    color: #888;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+        &::before, &::after {
+            content: '';
+            flex-grow: 1;
+            background-color: #e0e0e0;
+            height: 1px;
+            margin: 0 10px;
+        }
+    }
+    
+    .input-wrapper {
+    position: relative; 
+    width: 100%;
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%); 
+            color: #aaa;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+    } 
 }
+
+
+.error-message {
+  color: red;
+  font-size: 0.875em;
+  text-align: left;
+  margin-top: 0.25rem;
+  margin-left: 0.1rem; 
+}
+
+
+input.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.message-box {
+    padding: 0.8rem 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.api-success-message {
+    @extend .message-box;
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.api-error-message { 
+    @extend .message-box;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+form .error-message {
+  color: red;
+  font-size: 0.875em;
+  text-align: center; 
+  margin-top: 0.4rem; 
+  margin-bottom: 0.5rem; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 0.3rem; 
+}
+
+form .error-message .fas.fa-exclamation-circle { 
+  color: red;
+  font-size: 1.5em;
+}
+
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    // Aplicar o estilo visual do input ao wrapper
+    padding: 0; // O padding real vai no input interno para alinhar com o ícone
+    border: 1px solid #ccc;
+    border-radius: 4px; // <--- BORDER RADIUS AQUI TAMBÉM
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    display: flex; // Para alinhar o ícone e o input interno
+    align-items: center; // Alinha verticalmente
+
+    &:focus-within { // Estilo de foco para o wrapper
+        border-color: #004f35;
+        outline: none; // Ou um box-shadow para simular outline
+    }
+
+    .input-icon {
+      // ... (como antes)
+      left: 1rem;
+      color: #aaa;
+    }
+    input { // Input dentro do wrapper
+      flex-grow: 1; // Para ocupar o espaço restante
+      padding: 0.9rem 1rem 0.9rem 2.8rem; // top/right/bottom/left (com espaço para ícone)
+      border: none; // Borda fica no wrapper
+      border-radius: 0; // Cantos internos retos
+      outline: none; // Outline fica no wrapper
+      background-color: transparent; // Para não cobrir o fundo do wrapper
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      width: 100%; // Para garantir que o flex-grow funcione bem
+    }
+  }
+
+
+
+  
 

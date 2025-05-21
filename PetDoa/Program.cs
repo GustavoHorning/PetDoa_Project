@@ -19,6 +19,7 @@ namespace PetDoa
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
 
 
@@ -27,9 +28,21 @@ namespace PetDoa
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+            builder.Services.AddCors(options =>
+            {
+              options.AddPolicy(name: MyAllowSpecificOrigins,
+                                policy =>
+                                {
+                                  policy.WithOrigins("http://localhost:4200")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                                });
+            });
 
 
-            builder.Services.AddEndpointsApiExplorer();
+
+
+      builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddProblemDetails();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -115,11 +128,13 @@ namespace PetDoa
                 app.UseSwaggerUI();
             }
 
-            // 🔐 Ordem importa: Autenticação primeiro
+            app.UseCors(MyAllowSpecificOrigins);
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllers();
+
+      app.MapControllers();
 
             app.Run();
         }
