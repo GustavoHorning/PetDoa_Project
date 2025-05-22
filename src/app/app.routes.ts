@@ -9,7 +9,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 export const routes: Routes = [
     {path: 'cadastro', component: CadastroComponent},
     {path: 'home', component: HomeComponent},
-    { path: 'teste-dashboard', component: DashboardComponent },
+    { path: 'dashboard', component: DashboardComponent },
     { path: 'login', component: LoginComponent },
     { path: '', component: HomeComponent },
 

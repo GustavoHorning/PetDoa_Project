@@ -1,136 +1,211 @@
+// login.component.scss
+
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    min-height: 90vh;
-    background: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 90vh;
+  background: #f8f8f8;
   
-    .form-box {
-      flex: 1;
-      background: #ffffff;
-      padding: 3rem;
+
+  .form-box {
+    flex: 1;
+    background: #ffffff;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+    
+
+    h2 {
+      color: #004f35;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .social-login {
+      // ... (seu estilo .social-login) ...
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      button {
+        flex: 1;
+        padding: 0.8rem;
+        border-radius: 6px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: inline-flex; // Para alinhar imagem/ícone e texto
+        align-items: center;
+        justify-content: center;
+      }
+
+      .google {
+        background: #fff;
+        border: 1px solid #ccc;
+        color: rgba(0, 0, 0, 0.54); // Cor de texto comum
+        font-family: 'Roboto', sans-serif; // Fonte comum
+        letter-spacing: 0.25px;
+
+        .google-logo { // Se você usa a tag <img> para o logo
+          width: 18px;
+          height: 18px;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .separator {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #888;
+       display: flex; // Para fazer as linhas laterais
+       align-items: center;
+       &::before, &::after {
+         content: '';
+         flex-grow: 1;
+         background-color: #e0e0e0; // Cor da linha
+         height: 1px;
+         margin: 0 10px;
+       }
+    }
+
+    form {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-  
-      h2 {
-        color: #004f35;
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
+
+      label {
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+        text-align: left; // Alinha os labels à esquerda
       }
-  
-      p {
-        margin-bottom: 1.5rem;
-        color: #333;
-      }
-  
-      .social-login {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-  
-        button {
-          flex: 1;
-          padding: 0.8rem;
-          border-radius: 6px;
-          border: none;
-          font-weight: bold;
-          cursor: pointer;
-          font-size: 0.9rem;
+
+      // NOVO: Estilo para o .input-wrapper (que agora é o campo visual)
+      .input-wrapper {
+        position: relative; // Para o ícone absoluto
+        display: flex;     // Para alinhar o input interno (se necessário)
+        align-items: center;
+        width: 100%;
+        // Aplicando os estilos dos seus inputs originais aqui:
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px; // Raio de borda original dos inputs
+        background-color: #fff; // Garante fundo branco
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+
+        &:focus-within { // Quando o input DENTRO dele está focado
+          border-color: #004f35; // Ou sua cor de foco
         }
-  
-        .google {
-          background: #fff;
-          border: 1px solid #ccc;
+
+        .input-icon {
+          position: absolute;
+          left: 0.8rem; // Espaçamento do ícone da borda esquerda
+          top: 50%;
+          transform: translateY(-50%);
+          color: #aaa; // Cor do ícone
+          font-size: 0.9em; // Tamanho do ícone
+          pointer-events: none; // Para o clique ir para o input
         }
-  
-        .apple {
-          background: #000;
-          color: #fff;
-        }
-      }
-  
-      .separator {
-        text-align: center;
-        margin-bottom: 1.5rem;
-        color: #888;
-      }
-  
-      form {
-        display: flex;
-        flex-direction: column;
-  
-        label {
-          margin-bottom: 0.25rem;
-          font-weight: 600;
-        }
-  
-        input[type="text"],
+
+        // Input real DENTRO do wrapper
         input[type="email"],
         input[type="password"] {
-          padding: 0.6rem;
-          margin-bottom: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 6px;
-        }
-  
-        .esqueci {
-          font-size: 0.8rem;
-          float: right;
-          color: #888;
-          text-decoration: none;
-        }
-  
-        .check {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-          font-size: 0.9rem;
-        }
-  
-        .login-btn {
-          background-color: #004f35;
-          color: #fff;
-          padding: 0.9rem;
-          border: none;
-          border-radius: 8px;
-          font-weight: bold;
-          font-size: 1rem;
-          cursor: pointer;
-  
-          &:hover {
-            background-color: #063c29;
-          }
+          flex-grow: 1; // Ocupa o espaço disponível
+          width: 100%;  // Garante que o input expanda
+          // Padding: Top | Right | Bottom | Left (com espaço para o ícone)
+          padding: 0.6rem 0.6rem 0.6rem 2.4rem; // 0.6rem original + espaço para ícone
+          border: none; // A borda está no wrapper
+          border-radius: 0; // O input interno não precisa de raio de borda
+          outline: none; // O foco visual é no wrapper
+          background-color: transparent; // Para não cobrir o fundo do wrapper
+          font-size: inherit; // Herda o tamanho da fonte do wrapper ou form
+          font-family: inherit; // Herda a família da fonte
+          box-sizing: border-box;
         }
       }
-  
-      .cadastro {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-  
-        a {
-          color: #004f35;
-          font-weight: bold;
-          text-decoration: none;
+
+      .login-btn {
+        // ... (seu estilo .login-btn) ...
+        background-color: #004f35;
+        color: #fff;
+        padding: 0.9rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 0.5rem; // Ajuste se necessário após mensagens de erro
+
+        &:hover {
+          background-color: #063c29;
         }
+      }
+
+      // ESTILOS PARA MENSAGENS DE ERRO DE CAMPO
+      .field-error-message {
+        color: red;
+        font-size: 0.875em;
+        text-align: left; // Mantém alinhado à esquerda abaixo do campo
+        margin-top: -0.6rem; // Para ficar mais próximo do input
+        margin-bottom: 0.8rem; // Espaço antes do próximo label/input
+        padding-left: 0.2rem; // Pequeno recuo
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+
+        .fas.fa-exclamation-circle {
+          font-size: 1em; // Ícone do tamanho do texto do erro
+          line-height: 1;
+        }
+      }
+    } // Fim do form
+
+    .cadastro {
+      // ... (seu estilo .cadastro) ...
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      a {
+        color: #004f35;
+        font-weight: bold;
+        text-decoration: none;
       }
     }
-  
-    .image-box {
-      flex: 1;
-      background: #f4d35e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  
-      /*img {
-        width: 100%;
-        height: auto;
-        max-height: 100%;
-        object-fit: cover;
-        border-radius: 0 0 0 50px;
-      }*/
+
+    // ESTILOS PARA MENSAGENS GERAIS DA API (antes do botão de login)
+    .api-error-message {
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem; // Espaço antes do botão de login
+      border-radius: 6px; // Harmoniza com os inputs
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+  }
+
+  .image-box {
+    flex: 1;
+    background: #f4d35e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+      img {
+      max-height: 90vh;
+      width: 100%;
+      object-fit: cover;
     }
   }
-  
+}
