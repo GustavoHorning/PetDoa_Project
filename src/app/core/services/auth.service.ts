@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 
 interface RegistrationResponse {
   message: string;
+  token?: string;
 }
 
 interface LoginResponse {
@@ -73,10 +74,24 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  // register(donorData: RegisterDonorDto): Observable<RegistrationResponse> {
+  //   const registerUrl = `${this.apiUrlBase}/auth/donor/register`;
+  //   return this.http.post<RegistrationResponse>(registerUrl, donorData).pipe(
+  //     tap(response => console.log('Resposta do registro:', response)),
+  //     catchError(this.handleError)
+  //   );
+  // }
+
   register(donorData: RegisterDonorDto): Observable<RegistrationResponse> {
     const registerUrl = `${this.apiUrlBase}/auth/donor/register`;
     return this.http.post<RegistrationResponse>(registerUrl, donorData).pipe(
-      tap(response => console.log('Resposta do registro:', response)),
+      tap(response => { // <--- MODIFICAÇÃO AQUI DENTRO DO TAP
+        console.log('Resposta do registro:', response);
+        if (response && response.token) { // Verifica se o token foi retornado
+          this.storeToken(response.token); // Armazena o token e atualiza o estado de login
+          console.log('Token do registro armazenado. Usuário auto-logado.');
+        }
+      }),
       catchError(this.handleError)
     );
   }

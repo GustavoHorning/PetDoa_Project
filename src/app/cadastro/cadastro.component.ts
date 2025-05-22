@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractContro
 import { CommonModule } from '@angular/common'; 
 import { AuthService } from '../core/services/auth.service';
 import { RegisterDonorDto } from '../core/models/register-donor.dto'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro',
@@ -26,7 +27,8 @@ export class CadastroComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,8 @@ export class CadastroComponent implements OnInit {
     }
 
     
+
+    
     const donorData: RegisterDonorDto = {
       FullName: this.registrationForm.value.fullName, 
       Email: this.registrationForm.value.email,
@@ -68,6 +72,8 @@ export class CadastroComponent implements OnInit {
         this.isLoading = false;
         this.successMessage = response.message || 'Cadastro realizado com sucesso!';
         this.registrationForm.reset();
+        console.log("Cadastro bem-sucedido, navegando para o dashboard...");
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;
@@ -75,6 +81,14 @@ export class CadastroComponent implements OnInit {
         console.error('Erro no registro:', err);
       }
     });
+  }
+
+  signUpWithGoogle(): void {
+    console.log('Botão "Cadastrar com Google" CLICADO!'); 
+    this.isLoading = true; 
+    this.errorMessage = null;
+    this.successMessage = null;
+    this.authService.initiateGoogleAuth();
   }
 
   
@@ -101,3 +115,4 @@ export class CadastroComponent implements OnInit {
     }
   }
 }
+

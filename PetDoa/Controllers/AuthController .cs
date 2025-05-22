@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,34 +16,53 @@ namespace PetDoa.Controllers
         private readonly IDonorService _donorService;
         private readonly IAdminService _adminService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IDonorService donorService, IAdminService adminService, ILogger<AuthController> logger)
+    public AuthController(IDonorService donorService, IAdminService adminService, ILogger<AuthController> logger, IConfiguration configuration)
         {
             _donorService = donorService;
             _adminService = adminService;
             _logger = logger;
+            _configuration = configuration;
         }
 
+
+    
 
         [AllowAnonymous]
         [HttpPost("donor/register")]
         public async Task<IActionResult> Register([FromBody] RegisterDonorDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+          if (!ModelState.IsValid)
+          {
+            return BadRequest(ModelState);
+          }
 
-            var result = await _donorService.RegisterDonorAsync(dto);
+          var result = await _donorService.RegisterDonorAsync(dto); 
 
-            if (!result.Success)
-            {
-                return BadRequest(new { message = result.Message, errors = result.Errors });
-            }
-            return Ok(new { message = result.Message });
+          if (!result.Success || result.Data == null) 
+          {
+            return BadRequest(new { message = result.Message, errors = result.Errors });
+          }
+
+          var newDonor = result.Data;
+          var appToken = await _donorService.GenerateJwtForDonorAsync(newDonor);
+
+          if (appToken == null)
+          {
+            return Ok(new { message = result.Message + " (Erro ao gerar token de login automático)" });
+          }
+
+          return Ok(new
+          {
+            message = result.Message,
+            token = appToken
+          });
         }
 
-        [AllowAnonymous]
+
+
+    [AllowAnonymous]
         [HttpPost("donor/login")]
         public async Task<ActionResult<object>> Login([FromBody] LoginDonorDto dto)
         {
@@ -74,51 +93,69 @@ namespace PetDoa.Controllers
 
         [AllowAnonymous]
         [HttpGet("google/callback")]
-        public async Task<IActionResult> GoogleCallback(string? returnUrl = "/")
+        public async Task<IActionResult> GoogleCallback(string? returnUrl = "/", string? remoteError = null)
         {
-            var info = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
-            if (info?.Succeeded != true || info.Principal == null)
+          if (remoteError != null)
+          {
+            // Usuário negou o acesso ou houve erro no Google
+            // TODO: Redirecionar para uma página de erro/aviso no frontend
+            string frontendErrorUrl = _configuration["FrontendAppUrl"] ?? "http://localhost:4200"; // URL base do frontend
+            return Redirect($"{frontendErrorUrl}/login?error=google_auth_failed&message={Uri.EscapeDataString(remoteError)}");
+          }
+
+          var info = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+          if (info?.Succeeded != true || info.Principal == null)
+          {
+            string frontendErrorUrl = _configuration["FrontendAppUrl"] ?? "http://localhost:4200";
+            return Redirect($"{frontendErrorUrl}/login?error=external_auth_error");
+          }
+
+          string? googleUserId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+          string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+          string? firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+          string? lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+          string name = info.Principal.FindFirstValue(ClaimTypes.Name) ?? $"{firstName} {lastName}".Trim();
+
+          if (googleUserId == null || email == null)
+          {
+            string frontendErrorUrl = _configuration["FrontendAppUrl"] ?? "http://localhost:4200";
+            return Redirect($"{frontendErrorUrl}/login?error=google_info_missing");
+          }
+
+          await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+          var result = await _donorService.FindOrCreateDonorByOAuthAsync("Google", googleUserId, email, name);
+
+          // Obter a URL base do frontend da configuração
+          // Adicione "FrontendAppUrl": "http://localhost:4200" ao seu appsettings.Development.json
+          string frontendAppUrl = _configuration["FrontendAppUrl"] ?? "http://localhost:4200";
+          string callbackReceiverPath = "/auth-callback"; // Rota no frontend que receberá o token
+
+          if (result.Success && result.Donor != null)
+          {
+            var appToken = await _donorService.GenerateJwtForDonorAsync(result.Donor);
+            if (appToken == null)
             {
-                return BadRequest(new { message = "Erro durante a autenticação externa." });
+              return Redirect($"{frontendAppUrl}{callbackReceiverPath}?error=token_generation_failed");
             }
 
-            string? googleUserId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            string? firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
-            string? lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
-            string name = info.Principal.FindFirstValue(ClaimTypes.Name) ?? $"{firstName} {lastName}".Trim();
+            // Redireciona para o frontend passando o token como query parameter
+            // Usar fragmento (#) é mais seguro para tokens, mas query param é mais simples de ler no Angular
+            return Redirect($"{frontendAppUrl}{callbackReceiverPath}?token={Uri.EscapeDataString(appToken)}");
+          }
+          else if (result.RequiresPasswordLogin)
+          {
+            return Redirect($"{frontendAppUrl}{callbackReceiverPath}?error=email_conflict&message={Uri.EscapeDataString(result.ErrorMessage ?? "")}");
+          }
+          else
+          {
+            return Redirect($"{frontendAppUrl}{callbackReceiverPath}?error=social_processing_error&message={Uri.EscapeDataString(result.ErrorMessage ?? "")}");
+          }
+    }
 
 
-            if (googleUserId == null || email == null)
-            {
-                return BadRequest(new { message = "Informações essenciais (ID ou Email) não recebidas do Google." });
-            }
 
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            var result = await _donorService.FindOrCreateDonorByOAuthAsync("Google", googleUserId, email, name);
-
-            if (result.Success && result.Donor != null)
-            {
-                var appToken = await _donorService.GenerateJwtForDonorAsync(result.Donor);
-
-                if (appToken == null)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Não foi possível gerar o token de acesso interno." });
-                }
-                return Ok(new { Token = appToken });
-            }
-            else if (result.RequiresPasswordLogin)
-            {
-                return Conflict(new { message = result.ErrorMessage });
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = result.ErrorMessage ?? "Ocorreu um erro ao processar o login social." });
-            }
-        }
-
-        [AllowAnonymous]
+    [AllowAnonymous]
         [HttpPost("admin/login")]
         public async Task<ActionResult<AdminLoginResponseDTO>> LoginAdministratorAsync([FromBody] AdminLoginDTO dto)
         {
