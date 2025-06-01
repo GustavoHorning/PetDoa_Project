@@ -1,16 +1,49 @@
 <header class="header">
   <h1 class="logo">
     <svg class="emoji" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
-      <path fill="#F4D35E" d="M256 288c-56 0-96 48-96 96 0 48 56 80 96 80s96-32 96-80c0-48-40-96-96-96zm-104-16c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm208 0c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm-160-80c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64zm192 0c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64z"/>
+      <path fill="#F4D35E"
+        d="M256 288c-56 0-96 48-96 96 0 48 56 80 96 80s96-32 96-80c0-48-40-96-96-96zm-104-16c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm208 0c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm-160-80c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64zm192 0c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64z" />
     </svg>
     Pet<span class="destaque">Doa</span>
-  </h1> 
+  </h1>
 
   <nav>
     <a routerLink="/" routerLinkActive="ativo">Início</a>
     <a routerLink="/cadastro" routerLinkActive="ativo">Cadastro</a>
     <a routerLink="/doar" routerLinkActive="ativo">Doar</a>
     <a routerLink="/login" routerLinkActive="ativo">Login</a>
-  </nav>  
-  </header>
-  
+  </nav>
+
+  <!-- Só aparece no dashboard -->
+  <div *ngIf="isDashboard" class="usuario-dashboard">
+    <button (click)="toggleUserModal()" class="user-button">
+      <img [src]="userImageUrl" alt="Avatar" class="avatar" />
+    </button>
+
+    <div *ngIf="showUserModal" class="modal-box">
+      <form [formGroup]="userForm" (ngSubmit)="submitUserData()">
+        <div>
+          <label for="avatar">Foto de perfil</label>
+          <input type="file" id="avatar" (change)="handleFileInput($event)" />
+        </div>
+
+        <div>
+          <label for="email">E-mail</label>
+          <input type="email" id="email" formControlName="email" required />
+        </div>
+
+        <div>
+          <label for="password">Nova senha</label>
+          <input type="password" id="password" formControlName="password" required />
+        </div>
+
+        <button type="submit">Salvar</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<div *ngIf="toastVisible" class="toast">
+  {{ toastMessage }}
+</div>
+
