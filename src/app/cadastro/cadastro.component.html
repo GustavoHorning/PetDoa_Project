@@ -1,23 +1,83 @@
 <section class="cadastro-container">
+  <h2>CADASTRO</h2>
 
-<h2>CADASTRO</h2>
+  <div class="social-login-options">
+    <button type="button" class="google-signup-btn" (click)="signUpWithGoogle()">
+      <img src="assets/icons/logo-google.svg" alt="Google logo" class="google-logo">
+      <span>Cadastrar com Google</span>
+    </button>
+  </div>
 
-<form action="">
+  <div class="separator">ou</div>
+
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <fieldset>
-        <legend>preencha seus dados aqui embaixo</legend>
+      <legend>Preencha seus dados aqui embaixo</legend>
 
-        <input type="text" placeholder="Nome">
-        <input type="text" placeholder="Sobrenome">
-        <input type="email" placeholder="E-mail">
-        <input type="password" placeholder="Senha">
-        <input type="text" placeholder="Cidade">
-        <input type="tel" placeholder="Telefone">
+      <div>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" placeholder="Nome Completo" formControlName="fullName">
+        </div>
+        <div *ngIf="f['fullName'].invalid && (f['fullName'].dirty || f['fullName'].touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> 
+          <div *ngIf="f['fullName'].errors?.['required']">Nome completo é obrigatório.</div>
+          <div *ngIf="f['fullName'].errors?.['minlength']">Nome completo deve ter pelo menos 3 caracteres.</div>
+          <div *ngIf="f['fullName'].errors?.['maxlength']">Nome completo não pode exceder 150 caracteres.</div>
+        </div>
+      </div>
 
+      <div>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" placeholder="E-mail" formControlName="email">
+        </div>
+        <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> 
+          <div *ngIf="f['email'].errors?.['required']">E-mail é obrigatório.</div>
+          <div *ngIf="f['email'].errors?.['email']">Formato de e-mail inválido.</div>
+          <div *ngIf="f['email'].errors?.['maxlength']">E-mail não pode exceder 256 caracteres.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" placeholder="Senha" formControlName="password">
+        </div>
+        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> 
+          <div *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</div>
+          <div *ngIf="f['password'].errors?.['minlength']">Senha deve ter pelo menos 8 caracteres.</div>
+        </div>
+      </div>
+
+     <div>
+  <div class="input-wrapper">
+    <i class="fas fa-lock input-icon"></i>
+    <input type="password" placeholder="Confirmar Senha" formControlName="confirmPassword">
+  </div>
+
+  <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || f['confirmPassword'].touched)" class="error-message">
+    <i class="fas fa-exclamation-circle"></i>
+    
+    <span *ngIf="f['confirmPassword'].errors?.['required']">Confirmação de senha é obrigatória.</span>
+    
+    <span *ngIf="f['confirmPassword'].errors?.['mismatch']">As senhas não coincidem.</span>
+    
+  </div>
+</div>
+    
     </fieldset>
 
-    <button type="submit">CONFIRMAR</button>
-</form>
+    <div *ngIf="successMessage" class="api-success-message"> {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="api-error-message"> {{ errorMessage }}
+    </div>
 
-
-
+    <button type="submit" [disabled]="isLoading">
+      <span *ngIf="!isLoading">CONFIRMAR</span>
+      <span *ngIf="isLoading">Aguarde...</span>
+    </button>
+  </form>
 </section>

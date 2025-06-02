@@ -1,0 +1,6 @@
+@PetDoa_HostAddress = http://localhost:5016
+
+GET {{PetDoa_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
