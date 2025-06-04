@@ -1,0 +1,230 @@
+// src/app/features/user-profile/profile-modal/profile-modal.component.scss
+
+// Estilos base do modal (que você já deve ter ou adaptado)
+.profile-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); // Um pouco mais escuro para mais contraste
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; // Z-index alto
+  padding: 1rem; // Espaço para o modal não colar nas bordas em telas pequenas
+}
+
+.profile-modal-content {
+  background-color: #ffffff;
+  padding: 1.5rem 2rem; // Ajuste o padding
+  border-radius: 8px;   // Raio de borda para o modal
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 550px; // Largura máxima do modal
+  max-height: 90vh; // Altura máxima, com scroll interno se necessário
+  display: flex;
+  flex-direction: column;
+  position: relative; // Para o botão de fechar absoluto, se quiser
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #004f35;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 2rem; 
+    font-weight: 300; 
+    line-height: 1;
+    color: #6c757d; 
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.7;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.modal-body {
+  overflow-y: auto; 
+  padding-right: 0.5rem;
+  margin-right: -0.5rem; 
+
+  .profile-section {
+    margin-bottom: 2rem;
+    &:last-of-type { 
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      color: #004f35;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-text {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+  }
+
+  .picture-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem; 
+
+
+        .profile-avatar-display, 
+    .initials-avatar-display { 
+      width: 120px;
+      height: 120px;
+      border-radius: 50%; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 0.75rem;
+      background-color: #f0f0f0;
+      overflow: hidden;
+    }
+
+    .profile-avatar-display { 
+      object-fit: cover;
+      border: 3px solid #004f35; 
+    }
+
+    .initials-avatar-display { 
+      font-weight: 500;
+      color: white; 
+      font-size: 2.5rem; 
+      text-transform: uppercase;
+      border: 3px solid #004f35; 
+    }
+
+    .picture-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap; // Para quebrar em telas menores se necessário
+      justify-content: center;
+    }
+
+    // Estilo para botões de ação pequenos e links
+    .btn-link-like {
+      background: none; border: none; color: #004f35;
+      text-decoration: underline; cursor: pointer; padding: 0.3rem; font-size: 0.9rem;
+      &:hover { color: #003a28; }
+    }
+    .btn-small {
+      padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 5px;
+      border: none; color: white; cursor: pointer;
+      &.btn-primary { background-color: #004f35; &:hover:not(:disabled) { background-color: #003a28; } }
+      &.btn-danger { background-color: #dc3545; &:hover:not(:disabled) { background-color: #c82333; } }
+      &:disabled { background-color: #ccc; cursor: not-allowed; }
+    }
+  }
+
+  form {
+    .form-field {
+      margin-bottom: 1.2rem; // Espaço entre os campos do formulário
+      &:last-of-type { margin-bottom: 0.5rem; }
+
+      label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+        color: #333;
+        text-align: left; // Alinha os labels à esquerda
+      }
+
+      // IMPORTANTE: Você precisará ter os estilos para .input-wrapper e .input-icon
+      // definidos aqui ou globalmente para que os inputs com ícones funcionem.
+      // Se não estiverem globais, copie as regras do cadastro.component.scss para cá.
+      // Exemplo de como ficaria se copiasse (ajuste conforme sua necessidade):
+      .input-wrapper {
+        position: relative; width: 100%; display: flex; align-items: center;
+        border: 1px solid #ced4da; border-radius: 4px; background-color: #fff;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        &:focus-within { border-color: #004f35; box-shadow: 0 0 0 0.2rem rgba(0,79,53,.25); }
+
+        .input-icon {
+          position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+          color: #adb5bd; font-size: 0.9rem; pointer-events: none;
+        }
+        input {
+          flex-grow: 1; padding: 0.75rem 0.75rem 0.75rem 2.5rem; // Ajuste padding-left
+          border: none; outline: none; background-color: transparent;
+          font-size: 1rem; width: 100%; box-sizing: border-box;
+          border-radius: 4px; // Para cantos internos baterem com o wrapper
+        }
+      }
+      .field-error-message { /* Seus estilos de field-error-message aqui */ }
+    }
+
+    button[type="submit"] { // Botões de Salvar dentro dos formulários do modal
+      padding: 0.7rem 1.2rem; font-size: 0.95rem;
+      // ... resto dos seus estilos de botão primário ...
+      background-color: #004f35; color: white; border: none; border-radius: 5px;
+      cursor: pointer; align-self: flex-start; margin-top: 0.5rem;
+      &:hover:not(:disabled) { background-color: #003a28; }
+      &:disabled { background-color: #6c757d; opacity: 0.65; cursor: not-allowed; }
+    }
+  } // Fim do form
+
+  .modal-feedback { // Mensagens de sucesso/erro da API dentro do modal
+    padding: 0.8rem 1rem; margin-top: 1rem; border-radius: 5px;
+    text-align: center; font-size: 0.9rem;
+    &.success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;}
+    &.error   { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7;}
+    &.info    { background-color: #cff4fc; color: #055160; border: 1px solid #b6effb;}
+  }
+} // Fim do .modal-body
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end; // Alinha botões à direita
+  gap: 0.5rem;
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+  margin-top: 1rem;
+
+  button {
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .btn-primary { // Reutilize se tiver global
+    background-color: #004f35; color: white;
+    &:hover { background-color: #003a28; }
+  }
+  .btn-secondary { // Para o botão Fechar
+    background-color: #6c757d; color: white;
+    &:hover { background-color: #5a6268; }
+  }
+}
