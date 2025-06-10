@@ -1,45 +1,155 @@
-<div class="min-h-screen flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-blue-950 text-white p-4">
-      <h2 class="text-xl font-bold mb-6">Petdoa</h2>
-      <nav class="space-y-2 flex flex-col">
-        <a href="#" class="hover:text-green-400">Início</a>
-        <a href="#" class="hover:text-green-400">Doações</a>
-        <a href="#" class="hover:text-green-400">Instituições</a>
-        <a href="#" class="hover:text-green-400">Histórico</a>
-        <a href="#" class="hover:text-green-400">Configurações</a>
-      </nav>      
-    </aside>
-  
-    <!-- Conteúdo principal -->
-    <main class="flex-1 p-6 bg-gray-100">
-      <h1 class="text-2xl font-semibold mb-4">Painel do Usuário</h1>
-  
-      <!-- Cards Resumo -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <app-card-info label="Última Doação" value="R$ 120,00" />
-        <app-card-info label="Total Doado" value="R$ 1.230,00" />
-        <app-card-info label="Instituições Ativas" value="12" />
+<div class="min-h-screen flex bg-gray-100 font-sans">
+  <aside class="w-64 bg-gray-900 text-gray-400 p-5 flex flex-col shrink-0">
+    <div class="text-center py-4 mb-8">
+      <h2 class="text-2xl font-bold text-white tracking-widest">PET<span class="text-teal-400">DOA</span></h2>
+    </div>
+    <nav class="flex flex-col space-y-2">
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span>Painel</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+        <span>Fazer Doação</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-gray-700 text-white font-semibold shadow-inner">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Meu Histórico</span>
+      </a>
+    </nav>
+    <div class="mt-auto">
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        <span>Sair</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-10">
+    <div *ngIf="isLoading" class="text-center text-gray-500">Carregando...</div>
+
+    <div *ngIf="!isLoading && summary">
+      <div class="flex flex-col md:flex-row justify-between md:items-center mb-8">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Painel do Doador</h1>
+          <p class="text-md text-gray-500 mt-1">Olá, {{ summary.donorName }}! Seja bem-vindo de volta.</p>
+        </div>
+        <button (click)="openDonationModal()" class="flex items-center space-x-2 bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md hover:bg-teal-600 transition-all duration-300 transform hover:scale-105 mt-4 md:mt-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Nova Doação</span>
+        </button>
       </div>
-  
-      <!-- Lista de Instituições -->
-      <h2 class="text-xl font-semibold mb-2">Instituições</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-       <app-institution-card
-        *ngFor="let inst of institutions"
-        [name]="inst.name"
-        [cause]="inst.cause"
-        (donate)="handleDonation(inst)"
-      ></app-institution-card>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <h3 class="text-base font-semibold text-gray-600">Total Doado</h3>
+          <p class="text-4xl font-extrabold text-gray-900 mt-2">{{ summary.totalDonated | currency:'BRL':'symbol':'1.2-2' }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <h3 class="text-base font-semibold text-gray-600">Última Doação</h3>
+          <p class="text-4xl font-extrabold text-gray-900 mt-2">{{ timeSinceLastDonation }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300">
+          <h3 class="text-base font-semibold text-gray-600">Refeições Fornecidas</h3>
+          <p class="text-4xl font-extrabold text-gray-900 mt-2">{{ (summary.totalDonated / 10) | number:'1.0-0' }}</p>
+        </div>
       </div>
-      <app-donation-modal
-        *ngIf="selectedInstitution"
-        [show]="modalVisible"
-        [name]="selectedInstitution.name"
-        [cause]="selectedInstitution.cause"
-        (close)="handleModalClose()"
-        (confirm)="handleDonationConfirm($event)"
-      ></app-donation-modal>
-    </main>
-  </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Seu Histórico de Doações</h2>
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <table class="min-w-full">
+            <thead class="bg-gray-50 border-b-2 border-gray-200">
+              <tr>
+                <th class="p-4 text-center text-sm font-semibold text-gray-600">Data</th>
+                <th class="p-4 text-center text-sm font-semibold text-gray-600">Valor</th>
+                <th class="p-4 text-center text-sm font-semibold text-gray-600">Método</th>
+                <th class="p-4 text-center text-sm font-semibold text-gray-600">Status</th>
+                <th class="p-4 text-center text-sm font-semibold text-gray-600">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr *ngFor="let donation of history" class="hover:bg-gray-50 transition-colors duration-200">
+                <td class="p-4 whitespace-nowrap text-sm text-gray-800 text-center">{{ donation.date | date:'dd/MM/yyyy' }}</td>
+                <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900 text-center">{{ donation.amount | currency:'BRL' }}</td>
+                <td class="p-4 whitespace-nowrap text-sm text-gray-600 capitalize text-center">{{ formatPaymentMethod(donation.method) }}</td>
+                <td class="p-4 whitespace-nowrap text-sm text-center">
+                  <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full font-semibold"
+                        [ngClass]="getStatusInfo(donation.status).cssClass">
+                    <span class="w-2 h-2 rounded-full" 
+                          [ngClass]="getStatusInfo(donation.status).cssClass"></span>
+                    <span>{{ getStatusInfo(donation.status).text }}</span>
+                  </span>
+                </td>
+                <td class="p-4 whitespace-nowrap text-center">
+                  <button *ngIf="donation.status === 'Completed'" class="text-sm text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200">
+                    Ver Recibo
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="history.length === 0">
+                <td colspan="5" class="text-center py-16">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  <h3 class="mt-2 text-sm font-semibold text-gray-900">Sem doações</h3>
+                  <p class="mt-1 text-sm text-gray-500">Comece fazendo sua primeira doação.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+      </div>
+    </div>
+
+
+
+    <div *ngIf="isDonationModalVisible" 
+     @fade   
+     class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50" 
+     (click)="closeDonationModal()">
   
+  <div class="bg-white rounded-2xl shadow-2xl p-8 m-4 max-w-md w-full" 
+       (click)="$event.stopPropagation()">
+    
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Fazer uma Doação</h2>
+      <button (click)="closeDonationModal()" class="text-gray-400 hover:text-gray-700 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+        <div>
+          <p class="text-gray-600 mb-4">Seu apoio é fundamental. Escolha ou digite um valor para doar.</p>
+
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <button (click)="setDonationAmount(10)" [ngClass]="{'bg-teal-500 text-white': donationAmount === 10, 'bg-gray-200 hover:bg-gray-300': donationAmount !== 10}" class="p-3 rounded-lg font-semibold transition-colors">R$ 10</button>
+            <button (click)="setDonationAmount(25)" [ngClass]="{'bg-teal-500 text-white': donationAmount === 25, 'bg-gray-200 hover:bg-gray-300': donationAmount !== 25}" class="p-3 rounded-lg font-semibold transition-colors">R$ 25</button>
+            <button (click)="setDonationAmount(50)" [ngClass]="{'bg-teal-500 text-white': donationAmount === 50, 'bg-gray-200 hover:bg-gray-300': donationAmount !== 50}" class="p-3 rounded-lg font-semibold transition-colors">R$ 50</button>
+          </div>
+
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 font-semibold">R$</span>
+            <input type="number" [(ngModel)]="donationAmount" placeholder="Outro valor"
+                  class="w-full text-lg font-semibold pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors">
+          </div>
+        </div>
+
+        <div class="mt-8 flex justify-end space-x-3">
+          <button (click)="closeDonationModal()" class="px-6 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 font-semibold transition-colors">
+            Cancelar
+          </button>
+          <button (click)="confirmDonation()" [disabled]="isProcessingDonation"
+                  class="w-48 h-12 rounded-lg text-white bg-teal-500 hover:bg-teal-600 font-semibold flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+            <span *ngIf="!isProcessingDonation">Confirmar e Pagar</span>
+            <span *ngIf="isProcessingDonation" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processando...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,5 +1,6 @@
-﻿// PetDoa/Services/Interfaces/IDonationService.cs
-using PetDoa.DTOs; // Namespace para DonationReadDTO, CreateDonationDTO
+// PetDoa/Services/Interfaces/IDonationService.cs
+using PetDoa.DTOs;
+using static PetDoa.Controllers.DonationController; // Namespace para DonationReadDTO, CreateDonationDTO
 
 namespace PetDoa.Services.Interfaces
 {
@@ -16,5 +17,7 @@ namespace PetDoa.Services.Interfaces
 
         Task<bool> DeleteDonationAsync(int id);
 
-    }
+        Task<DashboardSummaryDto> GetDonationSummaryByDonorAsync(int donorId);
+
+  }
 }

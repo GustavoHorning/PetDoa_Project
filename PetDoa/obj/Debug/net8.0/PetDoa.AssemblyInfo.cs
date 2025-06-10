@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PetDoa")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc53517159deadc5e722c4c6a26b2c6ae2e7699e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b65df60b8ba222eb1d5db77cc63a3ac7a743fe0b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PetDoa")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PetDoa")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
