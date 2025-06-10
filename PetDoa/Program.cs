@@ -59,6 +59,14 @@ namespace PetDoa
             builder.Services.AddScoped<IOngService, OngService>();
             builder.Services.AddScoped<IDonationService, DonationService>();
             builder.Services.AddSingleton<IFileStorageService, AzureBlobStorageService>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IMercadoPagoService, MercadoPagoService>();
+            builder.Services.AddHttpContextAccessor();
+      builder.Services.AddHttpClient();
+
+
+
+
 
 
 

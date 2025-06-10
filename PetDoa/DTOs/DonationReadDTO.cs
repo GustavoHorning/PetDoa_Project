@@ -1,4 +1,4 @@
-﻿using PetDoa.Models.Enums;
+using PetDoa.Models.Enums;
 
 namespace PetDoa.DTOs
 {
@@ -9,11 +9,10 @@ namespace PetDoa.DTOs
         public PaymentMethod Method { get; set; } 
         public bool IsRecurring { get; set; }
         public DateTime Date { get; set; }
-
-        // Apenas o ID do doador e da ONG
         public int DonorID { get; set; }
         public int OngID { get; set; }
-    }
+        public DonationStatus Status { get; set; }
+  }
 }
 
 

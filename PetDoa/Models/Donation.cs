@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using PetDoa.Models.Enums;
 
 namespace PetDoa.Models
@@ -14,10 +14,10 @@ namespace PetDoa.Models
 
         public bool IsRecurring { get; set; } = false;
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.UtcNow;
 
-        // FK: Doação anônima (Donor pode ser null)
-        [Column("DonorID")]
+
+    [Column("DonorID")]
         public int? DonorID { get; set; }
 
         public Donor? Donor { get; set; }
@@ -27,5 +27,9 @@ namespace PetDoa.Models
 
         [ForeignKey("OngId")]
         public ONG? ONG { get; set; }
+
+        public DonationStatus Status { get; set; } 
+        public string? GatewayPaymentId { get; set; }
+
     }
 }
