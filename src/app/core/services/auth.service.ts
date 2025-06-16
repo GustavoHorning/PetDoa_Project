@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-// Certifique-se que os caminhos e nomes de arquivos dos DTOs estão corretos:
 import { RegisterDonorDto } from '../models/register-donor.dto';
 import { LoginDonorDto } from '../models/login-donor.dto';
 import { DonorReadDTO, UpdateDonorProfileDto, ChangePasswordDto } from '../models/donor.dtos'; // Supondo que DonorReadDTO, UpdateDonorProfileDto e ChangePasswordDto estão em donor.dtos.ts
 import { Router } from '@angular/router';
+import { AdminLoginDto } from '../models/admin.dtos.ts';
+import { isPlatformBrowser } from '@angular/common';
+
+
 
 interface RegistrationResponse {
   message: string;
@@ -16,16 +19,24 @@ interface RegistrationResponse {
 
 interface LoginResponse {
   token: string;
+  role: string;
 }
 
-// Interface para a resposta do backend ao trocar senha (se ele envia uma mensagem customizada)
+interface AdminLoginResponse {
+  token: string;
+  role: string;
+}
+
 interface ChangePasswordResponse {
     message: string;
 }
 
-// Interface para a resposta do backend ao fazer upload da foto
 interface UploadPictureResponse {
     profilePictureUrl: string;
+}
+
+interface DonorLoginResponse {
+  token: string;
 }
 
 
@@ -35,13 +46,16 @@ interface UploadPictureResponse {
 export class AuthService {
   private apiUrlBase = environment.apiUrl;
   private readonly TOKEN_KEY = 'authToken_petdoa_v1';
+  private readonly ROLE_KEY = 'userRole_petdoa_v1'; 
+
 
   private loggedInStatus = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.loggedInStatus.asObservable();
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
 
@@ -74,9 +88,17 @@ export class AuthService {
   logout(): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.ROLE_KEY);
     }
     this.updateAuthenticationState(false);
     this.router.navigate(['/login']);
+  }
+
+  public getUserRole(): string | null {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(this.ROLE_KEY);
+    }
+    return null;
   }
 
   register(donorData: RegisterDonorDto): Observable<RegistrationResponse> {
@@ -94,19 +116,94 @@ export class AuthService {
   }
 
 
-  login(credentials: LoginDonorDto): Observable<LoginResponse> {
+  // login(credentials: LoginDonorDto): Observable<LoginResponse> {
+  //   const loginUrl = `${this.apiUrlBase}/auth/donor/login`;
+  //   return this.http.post<LoginResponse>(loginUrl, credentials).pipe(
+  //     tap(response => {
+  //       if (response && response.token) {
+  //         this.storeToken(response.token);
+  //         console.log('Login bem-sucedido. Token armazenado.');
+  //       } else {
+  //         console.error('Resposta de login bem-sucedida, mas sem token recebido:', response);
+  //       }
+  //     }),
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  loginDonor(credentials: LoginDonorDto): Observable<LoginResponse> {
     const loginUrl = `${this.apiUrlBase}/auth/donor/login`;
+
     return this.http.post<LoginResponse>(loginUrl, credentials).pipe(
-      tap(response => {
+      tap(response => {        
         if (response && response.token) {
           this.storeToken(response.token);
-          console.log('Login bem-sucedido. Token armazenado.');
-        } else {
-          console.error('Resposta de login bem-sucedida, mas sem token recebido:', response);
         }
       }),
       catchError(this.handleError)
     );
+  }
+
+  // loginAdmin(credentials: AdminLoginDto): Observable<LoginResponse> {
+  //   // Verifique se a rota de autenticação do seu AdminController está correta
+  //   const loginUrl = `${this.apiUrlBase}/auth/admin/login`; 
+  //   return this.http.post<LoginResponse>(loginUrl, credentials).pipe(
+  //     tap(response => {        
+  //       if (response && response.token) {
+  //         this.storeToken(response.token);
+  //       }
+  //       }),
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  loginAdmin(credentials: AdminLoginDto): Observable<AdminLoginResponse> {
+    console.log('%c[AuthService] Tentando login de ADMIN...', 'color: blue;');
+    // CORREÇÃO APLICADA AQUI: Usando a rota que funciona no Postman.
+    const loginUrl = `${this.apiUrlBase}/auth/admin/login`;
+    return this.http.post<AdminLoginResponse>(loginUrl, credentials).pipe(
+      tap(response => {
+        console.log('%c[AuthService] Resposta de SUCESSO para Admin recebida.', 'color: green;');
+        if (response && response.token && response.role) {
+          this.storeSession(response.token, response.role); // Salvamos o token e a role que veio da API
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  // loginDonor(credentials: LoginDonorDto): Observable<DonorLoginResponse> {
+  //   console.log('%c[AuthService] Tentando login de DOADOR...', 'color: blue;');
+  //   const loginUrl = `${this.apiUrlBase}/auth/donor/login`;
+  //   return this.http.post<DonorLoginResponse>(loginUrl, credentials).pipe(
+  //     tap(response => {
+  //       console.log('%c[AuthService] Resposta de SUCESSO para Doador recebida.', 'color: green;');
+  //       if (response && response.token) {
+  //         this.storeSession(response.token, 'Donor'); // Salvamos o token e definimos a role como 'Donor'
+  //       }
+  //     }),
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  private storeSession(token: string, role: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.TOKEN_KEY, token);
+      localStorage.setItem(this.ROLE_KEY, role);
+      this.updateAuthenticationState(true);
+      console.log(`%c[AuthService] Sessão salva. Token armazenado. Role: ${role}`, 'color: green;');
+    }
+  }
+
+  private saveSession(response: LoginResponse): void {
+    if (typeof localStorage !== 'undefined') {
+      if (response && response.token && response.role) {
+        localStorage.setItem(this.TOKEN_KEY, response.token);
+        localStorage.setItem(this.ROLE_KEY, response.role); // Salva a role
+        this.updateAuthenticationState(true);
+        console.log('Sessão salva com sucesso. Token e Role armazenados.');
+      }
+    }
   }
 
   initiateGoogleAuth(): void {
@@ -125,19 +222,16 @@ export class AuthService {
     );
   }
 
-  // --- NOVOS MÉTODOS PARA O PERFIL ---
 
   updateProfileName(data: UpdateDonorProfileDto): Observable<void> {
     const updateUrl = `${this.apiUrlBase}/donor/me`;
-    // NOTA: Requer token JWT no header
     return this.http.put<void>(updateUrl, data).pipe(
       catchError(this.handleError)
     );
   }
 
-  changePassword(data: ChangePasswordDto): Observable<ChangePasswordResponse> { // Mudado para ChangePasswordResponse
+  changePassword(data: ChangePasswordDto): Observable<ChangePasswordResponse> {
     const changePasswordUrl = `${this.apiUrlBase}/donor/me/password`;
-    // NOTA: Requer token JWT no header
     return this.http.put<ChangePasswordResponse>(changePasswordUrl, data).pipe(
       catchError(this.handleError)
     );
@@ -146,10 +240,8 @@ export class AuthService {
   uploadProfilePicture(file: File): Observable<UploadPictureResponse> {
     const uploadUrl = `${this.apiUrlBase}/donor/me/picture`;
     const formData = new FormData();
-    // O backend espera um parâmetro chamado 'imageFile'
     formData.append('imageFile', file, file.name);
 
-    // NOTA: Requer token JWT no header
     return this.http.post<UploadPictureResponse>(uploadUrl, formData).pipe(
       catchError(this.handleError)
     );
@@ -157,70 +249,16 @@ export class AuthService {
 
   deleteProfilePicture(): Observable<void> {
     const deleteUrl = `${this.apiUrlBase}/donor/me/picture`;
-    // NOTA: Requer token JWT no header
     return this.http.delete<void>(deleteUrl).pipe(
       catchError(this.handleError)
     );
   }
 
-  // --- FIM DOS NOVOS MÉTODOS PARA O PERFIL ---
-
-//   private handleError(error: HttpErrorResponse) {
-//     // ... (seu método handleError existente e robusto) ...
-//     let displayMessage = 'Ocorreu um erro ao processar sua solicitação. Tente novamente.';
-//     console.error('Backend error:', error);
-//     console.error('Error body:', JSON.stringify(error.error));
-
-//     if (error.error instanceof ErrorEvent) {
-//       displayMessage = `Erro de rede ou cliente: ${error.error.message}`;
-//     } else {
-//       if (error.status === 401) {
-//         displayMessage = 'Sua sessão expirou ou é inválida. Por favor, faça login novamente.';
-//         this.logout();
-//       }
-      
-//       else if (error.status === 0) {
-//         displayMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão ou a URL da API.';
-//       } else if (error.error) {
-//         if (error.status === 400 && error.error.errors && typeof error.error.errors === 'object' && !Array.isArray(error.error.errors)) {
-//           const fieldErrorMessages = [];
-//           for (const field in error.error.errors) {
-//             if (error.error.errors.hasOwnProperty(field) && Array.isArray(error.error.errors[field])) {
-//               fieldErrorMessages.push(error.error.errors[field].join(' '));
-//             }
-//           }
-//           if (fieldErrorMessages.length > 0) {
-//             displayMessage = fieldErrorMessages.join('; ');
-//           } else if (typeof error.error.title === 'string') {
-//             displayMessage = error.error.title;
-//           } else {
-//             displayMessage = "Foram encontrados erros de validação.";
-//           }
-//         }
-//         else if (error.error.message && Array.isArray(error.error.errors) && error.error.errors.length > 0) {
-//           displayMessage = `${error.error.message} ${error.error.errors.join('; ')}`;
-//         }
-//         else if (typeof error.error.message === 'string') {
-//           displayMessage = error.error.message;
-//         }
-//         else if (typeof error.error === 'string') {
-//            displayMessage = error.error;
-//         }
-//         else {
-//           displayMessage = `Erro ${error.status}: ${error.statusText || 'Ocorreu um erro no servidor.'}`;
-//         }
-//       } else {
-//         displayMessage = `Erro ${error.status}: ${error.statusText || 'Ocorreu um erro no servidor.'}`;
-//       }
-//     }
-//     return throwError(() => new Error(displayMessage));
-//   }
-// }
-
-
-// DEPOIS (transforme em uma arrow function property):
 private handleError = (error: HttpErrorResponse): Observable<never> => {
-  // 'this' aqui dentro agora sempre se referirá à instância de AuthService
+  console.log('%c[AuthService] ERRO na chamada HTTP:', 'color: red; font-weight: bold;');
+    console.log(`%c--> URL da Requisição: ${error.url}`, 'color: red;');
+    console.log(`%c--> Status do Erro: ${error.status}`, 'color: red;');
+    console.log(`%c--> Corpo do Erro (RAW):`, 'color: red;', error.error);
   let displayMessage = 'Ocorreu um erro ao processar sua solicitação. Tente novamente.';
 
   console.error('Backend error:', error);
@@ -229,22 +267,16 @@ private handleError = (error: HttpErrorResponse): Observable<never> => {
   if (error.error instanceof ErrorEvent) {
     displayMessage = `Erro de rede ou cliente: ${error.error.message}`;
   } else {
-    if (error.status === 401) { // Não Autorizado (token inválido/expirado OU login/senha errados)
-      // Se o erro 401 veio de uma tentativa de login (rota de login), a mensagem deve ser sobre credenciais.
-      // Se veio de outra rota protegida, pode ser sessão expirada.
-      // Vamos ajustar a mensagem que o LoginComponent exibe.
-      // O logout aqui é para o caso de um token inválido/expirado ser detectado em chamadas subsequentes.
-      // Para uma falha de login inicial, o logout não muda muito, mas não prejudica.
+    if (error.status === 401) { 
       if (error.url?.includes('/auth/donor/login') || error.url?.includes('/auth/admin/login')) {
-        displayMessage = error.error?.message || 'E-mail ou senha inválidos.'; // Usa a mensagem do backend se existir
+        displayMessage = error.error?.message || 'E-mail ou senha inválidos.';
       } else {
         displayMessage = 'Sua sessão expirou ou é inválida. Por favor, faça login novamente.';
-        this.logout(); // Faz logout se for um 401 em uma rota protegida (token expirado)
+        this.logout();
       }
     } else if (error.status === 0) {
       displayMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão ou a URL da API.';
     } else if (error.error) {
-      // Validação do ASP.NET Core (ValidationProblemDetails)
       if (error.status === 400 && error.error.errors && typeof error.error.errors === 'object' && !Array.isArray(error.error.errors)) {
         const fieldErrorMessages = [];
         for (const field in error.error.errors) {
@@ -260,19 +292,15 @@ private handleError = (error: HttpErrorResponse): Observable<never> => {
           displayMessage = "Foram encontrados erros de validação.";
         }
       }
-      // Erros customizados do backend com array de erros
       else if (error.error.message && Array.isArray(error.error.errors) && error.error.errors.length > 0) {
         displayMessage = `${error.error.message} ${error.error.errors.join('; ')}`;
       }
-      // Erros customizados do backend com apenas message
       else if (typeof error.error.message === 'string') {
         displayMessage = error.error.message;
       }
-      // Backend retornou uma string simples
       else if (typeof error.error === 'string') {
         displayMessage = error.error;
       }
-      // Fallback
       else {
         displayMessage = `Erro ${error.status}: ${error.statusText || 'Ocorreu um erro no servidor.'}`;
       }
@@ -280,6 +308,6 @@ private handleError = (error: HttpErrorResponse): Observable<never> => {
       displayMessage = `Erro ${error.status}: ${error.statusText || 'Ocorreu um erro no servidor.'}`;
     }
   }
-  return throwError(() => new Error(displayMessage)); // Retorna um Observable de erro com a mensagem formatada
+  return throwError(() => new Error(displayMessage));
 }
 }

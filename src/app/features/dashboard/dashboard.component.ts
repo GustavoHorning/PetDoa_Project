@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { DashboardService, DashboardSummary, DonationHistory } from '../../core/services/dashboard.service';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, DatePipe, FormsModule],
+  imports: [CommonModule, CurrencyPipe, DatePipe, FormsModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -22,10 +26,18 @@ export class DashboardComponent implements OnInit {
   intervalId: any;
   timeSinceLastDonation: string = '';
 
-  
+  currentPage = 1;
+  pageSize = 5; 
+  totalPages = 0;
+
+  isReportModalVisible = false;
+  reportStartDate: string = '';
+  reportEndDate: string = '';
+  isGeneratingReport = false; 
+  public today: string = new Date().toISOString().split('T')[0];
 
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, private cdr: ChangeDetectorRef, private authService: AuthService, private router: Router) {}
 
   
 ngOnInit(): void {
@@ -35,10 +47,29 @@ ngOnInit(): void {
     this.timeSinceLastDonation = this.calculateTimeSinceLastDonation();
   });
 
-  this.dashboardService.getHistory().subscribe(data => {
-    this.history = data;
-  });
+  this.loadHistory(this.currentPage);
 }
+
+
+loadHistory(page: number): void {
+    this.dashboardService.getHistory(page, this.pageSize).subscribe(result => {
+      this.history = result.items;
+      this.currentPage = result.pageNumber;
+      this.totalPages = result.totalPages;
+    });
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.loadHistory(this.currentPage + 1);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.loadHistory(this.currentPage - 1);
+    }
+  }
 
 
   private calculateTimeSinceLastDonation(): string {
@@ -67,14 +98,23 @@ ngOnInit(): void {
   }
 }
 
-
-
-  public formatPaymentMethod(method: string): string {
-    if (!method) {
-      return '';
-    }
-    return method.replace('_', ' ');
+public formatPaymentMethod(method: string): string {
+  if (!method) {
+    return 'Não informado';
   }
+  switch (method.toLowerCase()) {
+    case 'creditcard': // <-- CORRIGIDO
+      return 'Cartão de Crédito';
+    case 'pix':
+      return 'Pix';
+    case 'boleto':
+      return 'Boleto';
+    case 'outro':
+      return 'Outro';
+    default:
+      return method;
+  }
+}
 
   public getStatusInfo(status: any): { text: string; cssClass: string } {
   switch (status) {
@@ -92,11 +132,13 @@ ngOnInit(): void {
 
   openDonationModal(): void {
     this.isDonationModalVisible = true;
+    this.cdr.detectChanges();
   }
 
   closeDonationModal(): void {
     this.isDonationModalVisible = false;
     this.donationAmount = 25; 
+    this.cdr.detectChanges();
   }
 
   setDonationAmount(amount: number): void {
@@ -124,4 +166,94 @@ ngOnInit(): void {
       }
     });
   }
+
+
+  downloadReceipt(donationId: number): void {
+  
+  this.dashboardService.getReceipt(donationId).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `recibo-doacao-${donationId}.pdf`;
+      
+      document.body.appendChild(a);
+      a.click();
+      
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    },
+    error: (err) => {
+      console.error('Erro ao baixar o recibo:', err);
+      alert('Não foi possível gerar o recibo. Tente novamente mais tarde.');
+    }
+  });
+}
+
+
+openReportModal(): void {
+    this.setReportRange('thisMonth');
+    this.isReportModalVisible = true;
+    this.cdr.detectChanges();
+  }
+
+  closeReportModal(): void {
+    this.isReportModalVisible = false;
+    this.cdr.detectChanges(); 
+  }
+
+
+  setReportRange(period: 'thisMonth' | 'lastMonth'): void {
+    const now = new Date();
+    let startDate: Date;
+    let endDate: Date;
+
+    if (period === 'thisMonth') {
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        endDate = now;
+    } else {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        endDate = new Date(now.getFullYear(), now.getMonth(), 0);
+    }
+    
+    this.reportStartDate = startDate.toISOString().split('T')[0];
+    this.reportEndDate = endDate.toISOString().split('T')[0];
+  }
+
+
+  generateReport(): void {
+    if (!this.reportStartDate || !this.reportEndDate) {
+      alert('Por favor, selecione um período de datas válido.');
+      return;
+    }
+    
+    this.isGeneratingReport = true;
+
+    this.dashboardService.getConsolidatedReport(this.reportStartDate, this.reportEndDate).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `relatorio-doacoes-${this.reportStartDate}-a-${this.reportEndDate}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+        
+        this.isGeneratingReport = false;
+        this.closeReportModal();
+      },
+      error: (err) => {
+        console.error('Erro ao gerar relatório:', err);
+        alert('Não foi possível gerar o relatório. Tente novamente.');
+        this.isGeneratingReport = false;
+      }
+    });
+  }
+
+  public logout(): void {
+  this.authService.logout();
+
+  this.router.navigate(['/login']);
+}
 }

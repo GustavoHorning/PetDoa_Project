@@ -12,6 +12,7 @@ namespace PetDoa.DTOs
         public int DonorID { get; set; }
         public int OngID { get; set; }
         public DonationStatus Status { get; set; }
+        public string? ProductName { get; set; }
   }
 }
 

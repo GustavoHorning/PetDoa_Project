@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Router, RouterModule,  NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { DonorReadDTO } from '../core/models/donor.dtos';
 import { ProfileModalComponent } from '../features/user-profile/profile-modal/profile-modal.component';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-header',
@@ -16,21 +18,25 @@ import { ProfileModalComponent } from '../features/user-profile/profile-modal/pr
 export class HeaderComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn = false;
+  public isInsideDashboard = false;
   userName: string | null = null;
   userImageUrl: string | null = 'assets/img/avatar-default.png';
   //showUserModal = false;
   
+  
+  
   currentUserProfile: DonorReadDTO | null = null;
 
-  // NOVAS PROPRIEDADES PARA DROPDOWN E MODAL DE EDIÇÃO
   showProfileDropdown = false;
-  showProfileEditModal = false; // Controla o modal de edição de perfil
+  showProfileEditModal = false;
 
   userInitials: string | null = null;
   avatarBackgroundColor: string = '#cccccc';
 
   toastVisible = false;
   toastMessage = '';
+  mobileMenuOpen: boolean = false;
+
 
   private authSubscription!: Subscription;
 
@@ -43,24 +49,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.authSubscription = this.authService.isLoggedIn$.subscribe(isLoggedIn => {
       this.isUserLoggedIn = isLoggedIn;
       if (isLoggedIn) {
-        this.loadUserProfile();
+        //this.loadUserProfile();
+        this.loadProfileBasedOnRole();
       } else {
         this.clearUserProfileData();
         //this.showUserModal = false;
-        this.showProfileDropdown = false; // Fecha dropdown ao deslogar
-        this.showProfileEditModal = false; // Fecha modal de edição ao deslogar
+        this.showProfileDropdown = false;
+        this.showProfileEditModal = false;
       }
     });
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      if (event instanceof NavigationEnd)
+      {
+        this.isInsideDashboard = event.url.startsWith('/dashboard') || event.urlAfterRedirects.startsWith('/dashboard');
+      }
+    });
+
+    
   }
 
-  loadUserProfile(): void {
+
+  
+
+  loadProfileBasedOnRole(): void {
+    const role = this.authService.getUserRole(); // Pegamos a role que salvamos no login
+
+    if (role === 'Admin' || role === 'SuperAdmin') {
+      // Se for Admin, preenchemos com dados de admin
+      this.currentUserProfile = null; // Admins não têm perfil de doador editável
+      this.userName = 'Administrador'; // Ou poderíamos buscar o nome do admin no futuro
+      this.userImageUrl = null; // Admins não têm foto de perfil neste sistema
+      this.userInitials = 'AD';
+      this.avatarBackgroundColor = '#ef4444'; // Cor vermelha para destacar o admin
+    } else {
+      // Se for Doador, executa a lógica que já tínhamos
+      this.loadDonorProfile();
+    }
+  }
+
+  loadDonorProfile(): void {
     if (!this.authService.getToken()) {
       this.clearUserProfileData();
       return;
@@ -131,60 +169,46 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-//   toggleUserModal(): void {
-//   if (this.isUserLoggedIn) {
-//     if (!this.showUserModal) { 
-//       console.log('HeaderComponent: Dados que serão passados para o modal (currentUserProfile):', JSON.parse(JSON.stringify(this.currentUserProfile)));
-//       if (!this.currentUserProfile) {
-//          this.loadUserProfile(); 
-//       }
-//     }
-//     this.showUserModal = !this.showUserModal;
-//   }
-// }
-
-      // NOVO: Alterna a visibilidade do dropdown
   toggleProfileDropdown(): void {
     this.showProfileDropdown = !this.showProfileDropdown;
-    // Se o dropdown estiver abrindo e o modal de edição estiver aberto, feche o modal.
     if (this.showProfileDropdown && this.showProfileEditModal) {
       this.showProfileEditModal = false;
     }
   }
 
-
-  // NOVO: Abre o modal de edição a partir do dropdown
   openEditProfileModal(): void {
     if (this.isUserLoggedIn && this.currentUserProfile) {
-      this.showProfileEditModal = true;  // Mostra o modal de edição
-      this.showProfileDropdown = false; // Esconde o dropdown
+      this.showProfileEditModal = true; 
+      this.showProfileDropdown = false;
       console.log('Header: Abrindo modal de edição de perfil. currentUserProfile:', this.currentUserProfile);
     } else if (this.isUserLoggedIn && !this.currentUserProfile) {
-        this.loadUserProfile(); // Tenta carregar perfil se não estiver pronto
-        // O usuário talvez precise clicar de novo após o carregamento
+        this.loadDonorProfile();
         console.warn("Header: Tentou abrir modal de edição, mas currentUserProfile era nulo. Tentando carregar.");
     }
   }
 
-  // NOVO: Fecha o modal de edição (chamado pelo @Output do ProfileModalComponent)
   closeEditProfileModal(): void {
     this.showProfileEditModal = false;
     console.log('Header: Modal de edição de perfil fechado.');
   }
 
-
-
   logout(): void {
     this.authService.logout();
-    this.showProfileDropdown = false;    // Garante que o dropdown feche
-    this.showProfileEditModal = false;   // Garante que o modal de edição feche
+    this.showProfileDropdown = false; 
+    this.showProfileEditModal = false;
   }
 
   onProfileUpdated(): void {
-    this.loadUserProfile();
-    this.closeEditProfileModal(); // Fecha o modal após a atualização
+    this.loadDonorProfile();
+    this.closeEditProfileModal(); 
     this.toastMessage = 'Perfil atualizado com sucesso!';
     this.toastVisible = true;
     setTimeout(() => { this.toastVisible = false; }, 3000);
   }
+
+  toggleMobileMenu(): void {
+  this.mobileMenuOpen = !this.mobileMenuOpen;
 }
+}
+
+

@@ -88,6 +88,12 @@ namespace PetDoa.Migrations
                     b.Property<int>("OngId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -144,6 +150,18 @@ namespace PetDoa.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("Cause")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cnpj")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -156,6 +174,10 @@ namespace PetDoa.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -164,9 +186,52 @@ namespace PetDoa.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("RegistrationDate");
 
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.ToTable("ONG");
+                });
+
+            modelBuilder.Entity("PetDoa.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("PetDoa.Models.Administrator", b =>
@@ -183,7 +248,7 @@ namespace PetDoa.Migrations
             modelBuilder.Entity("PetDoa.Models.Donation", b =>
                 {
                     b.HasOne("PetDoa.Models.Donor", "Donor")
-                        .WithMany()
+                        .WithMany("Donations")
                         .HasForeignKey("DonorID");
 
                     b.HasOne("PetDoa.Models.ONG", "ONG")
@@ -195,6 +260,11 @@ namespace PetDoa.Migrations
                     b.Navigation("Donor");
 
                     b.Navigation("ONG");
+                });
+
+            modelBuilder.Entity("PetDoa.Models.Donor", b =>
+                {
+                    b.Navigation("Donations");
                 });
 
             modelBuilder.Entity("PetDoa.Models.ONG", b =>

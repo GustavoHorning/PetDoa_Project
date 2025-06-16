@@ -1,4 +1,4 @@
-﻿using PetDoa.DTOs;
+using PetDoa.DTOs;
 
 namespace PetDoa.Services.Interfaces
 {
@@ -13,5 +13,9 @@ namespace PetDoa.Services.Interfaces
         Task<AdminReadDTO> CreateAdminAsync(CreateAdminApiDTO createDto); // Usando o novo DTO
 
         Task<bool> DeleteAdminAsync(int id);
-    }
+        Task<AdminDashboardDto> GetAdminDashboardDataAsync();
+
+    Task<PaginatedResultDto<AdminDonorListDto>> GetAllDonorsAsync(int pageNumber, int pageSize, string? searchTerm);
+    Task<AdminDonorDetailDto?> GetDonorDetailsAsync(int donorId);
+  }
 }

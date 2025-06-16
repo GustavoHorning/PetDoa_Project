@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetDoa.DTOs; 
 using PetDoa.Services.Interfaces;
@@ -73,6 +73,46 @@ namespace PetDoa.Controllers
             return NoContent();
         }
 
-        
+    [HttpGet("dashboard")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public async Task<ActionResult<AdminDashboardDto>> GetDashboardData()
+    {
+      try
+      {
+        var dashboardData = await _adminService.GetAdminDashboardDataAsync();
+        return Ok(dashboardData);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, "Ocorreu um erro interno ao buscar os dados do dashboard.");
+      }
     }
+
+
+
+    [HttpGet("donors")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public async Task<ActionResult<PaginatedResultDto<AdminDonorListDto>>> GetAllDonors(
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? searchTerm = null)
+    {
+      var donors = await _adminService.GetAllDonorsAsync(pageNumber, pageSize, searchTerm);
+      return Ok(donors);
+    }
+
+    [HttpGet("donors/{id}")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public async Task<ActionResult<AdminDonorDetailDto>> GetDonorDetails(int id)
+    {
+      var donorDetails = await _adminService.GetDonorDetailsAsync(id);
+      if (donorDetails == null)
+      {
+        return NotFound();
+      }
+      return Ok(donorDetails);
+    }
+
+
+  }
 }

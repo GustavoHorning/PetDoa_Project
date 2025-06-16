@@ -1,0 +1,62 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+  <!-- Card Principal -->
+  <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl overflow-hidden md:flex animate-fade-in">
+    
+    <!-- Coluna da Imagem (Esquerda) -->
+    <div class="md:w-1/2 hidden md:block">
+      <!-- Usamos uma imagem que transmite carinho e segurança -->
+      <img src="https://images.pexels.com/photos/59523/pexels-photo-59523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+           alt="Cachorro olhando com carinho" 
+           class="h-full w-full object-cover">
+    </div>
+
+    <!-- Coluna de Conteúdo (Direita) -->
+    <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+      <h1 class="text-3xl font-bold text-gray-900 leading-tight">Você está a um passo de fazer a diferença.</h1>
+      <p class="mt-4 text-gray-600">
+        Para garantir a total segurança da sua doação e para que possamos gerar um recibo oficial em seu nome, pedimos que crie uma conta ou faça login. É rápido, seguro e nos ajuda a manter a transparência com todos os nossos doadores.
+      </p>
+
+      <!-- Lista de Benefícios -->
+      <ul class="mt-8 space-y-4">
+        <li class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div class="ml-3">
+            <h4 class="text-lg font-semibold text-gray-800">Recibos Oficiais</h4>
+            <p class="text-sm text-gray-600">Acesse e baixe todos os seus recibos a qualquer momento para seu controle.</p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div class="ml-3">
+            <h4 class="text-lg font-semibold text-gray-800">Histórico de Impacto</h4>
+            <p class="text-sm text-gray-600">Veja todo o seu impacto em um painel exclusivo e acompanhe a diferença que você faz.</p>
+          </div>
+        </li>
+         <li class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div class="ml-3">
+            <h4 class="text-lg font-semibold text-gray-800">Pagamento Seguro</h4>
+            <p class="text-sm text-gray-600">Processamos sua doação com a máxima segurança através de nossos parceiros.</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Botões de Ação -->
+      <div class="mt-10 space-y-4">
+        <a routerLink="/cadastro" class="block w-full text-center px-8 py-4 bg-teal-500 text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition-all duration-300 transform hover:scale-105">
+          Criar Cadastro Gratuito
+        </a>
+        <a routerLink="/login" class="block w-full text-center px-8 py-3 text-gray-800 font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-300">
+          Já Tenho uma Conta
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

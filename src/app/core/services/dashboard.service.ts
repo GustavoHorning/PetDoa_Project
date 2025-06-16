@@ -1,4 +1,3 @@
-// dashboard.service.ts
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -9,14 +8,35 @@ export interface DashboardSummary {
   totalDonated: number;
   lastDonationDate: string | null;
   donorName: string;
+  itemsDonatedCount: number;
 }
 
 export interface DonationHistory {
+  id: number;
   date: string;
   amount: number;
   method: string;
   status: string;
+  productName?: string;
 }
+
+export interface PaginatedResult<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  isActive: boolean;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,22 +58,26 @@ export class DashboardService {
       return of({
         totalDonated: 0,
         lastDonationDate: null,
-        donorName: ''
+        donorName: '',
+        itemsDonatedCount: 0
       });
     }
   }
 
-  getHistory(): Observable<DonationHistory[]> {
+getHistory(page: number, pageSize: number): Observable<PaginatedResult<DonationHistory>> {
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('authToken_petdoa_v1');
+      if (!token) {
+        return of({ items: [], totalCount: 0, pageNumber: 1, pageSize: pageSize, totalPages: 0 });
+      }
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      return this.http.get<DonationHistory[]>(`${this.apiUrl}/donation/me`, { headers });
+      return this.http.get<PaginatedResult<DonationHistory>>(`${this.apiUrl}/donation/me?pageNumber=${page}&pageSize=${pageSize}`, { headers });
     } else {
-      return of([]);
+      return of({ items: [], totalCount: 0, pageNumber: 1, pageSize: pageSize, totalPages: 0 });
     }
   }
 
-      createPayment(amount: number): Observable<{ paymentUrl: string }> {
+      createPayment(amount: number, productId?: number): Observable<{ paymentUrl: string }> {
         if (isPlatformBrowser(this.platformId)) {
           const token = localStorage.getItem('authToken_petdoa_v1');
           if (!token) {
@@ -62,7 +86,7 @@ export class DashboardService {
           }
 
           const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-          const body = { amount };
+          const body = { amount, productId };
 
           return this.http.post<{ paymentUrl: string }>(`${this.apiUrl}/payments/checkout`, body, { headers });
 
@@ -71,4 +95,74 @@ export class DashboardService {
           return throwError(() => new Error('A criação de pagamento não pode ser feita no servidor.'));
         }
   }
+
+
+  getReceipt(donationId: number): Observable<Blob> {
+  if (isPlatformBrowser(this.platformId)) {
+    const token = localStorage.getItem('authToken_petdoa_v1');
+
+    if (!token) {
+      console.error("Token não encontrado ao tentar baixar recibo.");
+      return throwError(() => new Error('Sua sessão expirou ou o token não foi encontrado.'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/donation/${donationId}/receipt`, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  } else {
+    return throwError(() => new Error('A geração de recibos só pode ser feita no navegador.'));
+  }
+
+
+
+}
+
+  
+getConsolidatedReport(startDate: string, endDate: string): Observable<Blob> {
+  if (isPlatformBrowser(this.platformId)) {
+    const token = localStorage.getItem('authToken_petdoa_v1');
+
+    if (!token) {
+      console.error("Token não encontrado ao gerar relatório.");
+      return throwError(() => new Error('Usuário não autenticado.'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    const url = `${this.apiUrl}/donation/report?startDate=${startDate}&endDate=${endDate}`;
+
+    return this.http.get(url, {
+      headers: headers,
+      responseType: 'blob'
+    });
+
+  } else {
+    return throwError(() => new Error('Relatórios só podem ser gerados no navegador.'));
+  }
+}
+
+getProducts(): Observable<Product[]> {
+  if (isPlatformBrowser(this.platformId)) {
+    const token = localStorage.getItem('authToken_petdoa_v1');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Product[]>(`${this.apiUrl}/products`, { headers });
+  } else {
+    return of([]);
+  }
+}
+
+
+getRecentHistory(limit: number): Observable<DonationHistory[]> {
+    if (isPlatformBrowser(this.platformId)) {
+        const token = localStorage.getItem('authToken_petdoa_v1');
+        if (!token) { return of([]); }
+        
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.get<DonationHistory[]>(`${this.apiUrl}/donation/me/recent?limit=${limit}`, { headers });
+    } else {
+        return of([]);
+    }
+}
 }

@@ -1,89 +1,67 @@
-<header class="header">
-  <h1 class="logo" routerLink="/"> 
-    <svg class="emoji" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
-      <path fill="#F4D35E" d="M256 288c-56 0-96 48-96 96 0 48 56 80 96 80s96-32 96-80c0-48-40-96-96-96zm-104-16c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm208 0c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm-160-80c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64zm192 0c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64z" />
+
+<header class="header-container">
+  
+  <a class="logo-link" routerLink="/"> 
+    <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M256 288c-56 0-96 48-96 96 0 48 56 80 96 80s96-32 96-80c0-48-40-96-96-96zm-104-16c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm208 0c-31 0-56-29-56-64s25-64 56-64 56 29 56 64-25 64-56 64zm-160-80c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64zm192 0c0 35-25 64-56 64s-56-29-56-64 25-64 56-64 56 29 56 64z" />
     </svg>
-    Pet<span class="destaque">Doa</span>
-  </h1>
+    <span class="logo-text">Pet<span class="logo-highlight">Doa</span></span>
+  </a>
 
-  <nav *ngIf="!isUserLoggedIn">
-    <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">Início</a>
-    <a routerLink="/cadastro" routerLinkActive="ativo">Cadastro</a>
-    <a routerLink="/login" [queryParams]="{ returnUrl: '/doar-page' }" routerLinkActive="ativo">Doar</a>
-    <a routerLink="/login" routerLinkActive="ativo">Login</a>
+  <button class="hamburger-button" (click)="toggleMobileMenu()" aria-label="Abrir menu">
+    ☰
+  </button>
+
+  <nav [class.open]="mobileMenuOpen" class="main-nav" *ngIf="!isUserLoggedIn">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Início</a>
+    <a routerLink="/cadastro" routerLinkActive="active">Cadastro</a>
+    <a routerLink="/quero-ajudar" routerLinkActive="active">Doar</a>
+    <a routerLink="/login" class="login-button">Login</a>
   </nav>
 
-  <nav *ngIf="isUserLoggedIn">
-    <a routerLink="/dashboard" routerLinkActive="ativo">Meu Painel</a>
-    <a routerLink="/minhas-doacoes" routerLinkActive="ativo">Minhas Doações</a>
-    <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">Início</a>
+  <nav [class.open]="mobileMenuOpen" class="main-nav" *ngIf="isUserLoggedIn && !isInsideDashboard">
+    <a routerLink="/dashboard" routerLinkActive="active">Meu Painel</a>
+    <a routerLink="/dashboard/historico" routerLinkActive="active">Minhas Doações</a>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Início</a>
   </nav>
 
-  <!-- <div *ngIf="isUserLoggedIn" class="usuario-dashboard">
-    <button (click)="toggleUserModal()" class="user-button">
-      <img *ngIf="userImageUrl" [src]="userImageUrl" alt="Avatar" class="avatar" />
-      <div *ngIf="!userImageUrl && userInitials" 
-           class="initials-avatar" 
-           [style.backgroundColor]="avatarBackgroundColor">
+  <div *ngIf="isUserLoggedIn" class="profile-area">
+    <button (click)="toggleProfileDropdown()" class="profile-button" type="button" aria-label="Menu do usuário">
+      <img *ngIf="userImageUrl" [src]="userImageUrl" alt="Avatar" class="avatar-img" />
+      <div *ngIf="!userImageUrl && userInitials" class="avatar-initials" [style.backgroundColor]="avatarBackgroundColor">
         <span>{{ userInitials }}</span>
       </div>
     </button>
 
-    <app-profile-modal
-  *ngIf="showUserModal && currentUserProfile"
-  [profileData]="currentUserProfile"
-  (closeModal)="toggleUserModal()"
-  (profileUpdated)="onProfileUpdated()"
-  (logoutClicked)="logout()"> 
-</app-profile-modal>
-  </div> -->
-
-
-  <div *ngIf="isUserLoggedIn" class="usuario-dashboard">
-    <button (click)="toggleProfileDropdown()" class="user-button" type="button" aria-label="Menu do usuário">
-      <img *ngIf="userImageUrl" [src]="userImageUrl" alt="Avatar" class="avatar" />
-      <div *ngIf="!userImageUrl && userInitials"
-           class="initials-avatar"
-           [style.backgroundColor]="avatarBackgroundColor">
-        <span>{{ userInitials }}</span>
+    <div *ngIf="showProfileDropdown" @dropdownAnimation class="profile-dropdown">
+      <div class="dropdown-header">
+        <strong *ngIf="currentUserProfile">{{ currentUserProfile.name }}</strong>
+        <br>
+        <span *ngIf="currentUserProfile" class="dropdown-email">{{ currentUserProfile.email }}</span>
       </div>
-    </button>
-
-    <div *ngIf="showProfileDropdown" class="profile-dropdown">
-      <div class="dropdown-header" *ngIf="currentUserProfile">
-        <strong>{{ currentUserProfile.name }}</strong>
-        <span class="dropdown-email" *ngIf="currentUserProfile.email">{{ currentUserProfile.email }}</span>
-      </div>
-      <ul>
+      <ul class="dropdown-menu">
         <li>
           <button type="button" (click)="openEditProfileModal()"> 
-            <i class="fas fa-user-edit"></i>
-            Editar Perfil
+            <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <span>Editar Perfil</span>
           </button>
         </li>
         <li>
           <button type="button" (click)="logout()"> 
-            <i class="fas fa-sign-out-alt"></i> 
-            Sair
+            <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            <span>Sair</span>
           </button>
         </li>
       </ul>
     </div>
   </div>
 
-  <app-profile-modal
-    *ngIf="showProfileEditModal && currentUserProfile"
+  <app-profile-modal *ngIf="showProfileEditModal && currentUserProfile"
     [profileData]="currentUserProfile"
     (closeModal)="closeEditProfileModal()"
     (profileUpdated)="onProfileUpdated()"
     (logoutClicked)="logout()">
   </app-profile-modal>
-
-
-
-
 </header>
 
-<div *ngIf="toastVisible" class="toast">
-  {{ toastMessage }}
-</div>
+<div *ngIf="toastVisible" class="toast">{{ toastMessage }}</div>

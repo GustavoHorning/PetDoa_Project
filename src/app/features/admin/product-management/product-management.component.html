@@ -1,0 +1,89 @@
+<div class="space-y-6">
+  <!-- Cabeçalho da Página -->
+  <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Gerenciamento da Loja</h1>
+      <p class="text-md text-gray-500 mt-1">Adicione, edite ou desative os itens da Lojinha Solidária.</p>
+    </div>
+    <button (click)="openAddModal()" class="mt-4 sm:mt-0 flex items-center space-x-2 bg-teal-500 text-white font-bold px-4 py-2 rounded-lg shadow-md hover:bg-teal-600 transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      <span>Adicionar Produto</span>
+    </button>
+  </div>
+
+  <!-- Tabela de Produtos -->
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Produto</th>
+          <th class="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Preço</th>
+          <th class="py-3 px-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="py-3 px-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngIf="isLoading"><td colspan="4" class="text-center p-4">Carregando produtos...</td></tr>
+        <tr *ngFor="let product of products" class="hover:bg-gray-50">
+          <td class="p-4 whitespace-nowrap">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 h-10 w-10">
+                <img class="h-10 w-10 rounded-md object-cover" [src]="product.imageUrl" [alt]="product.name">
+              </div>
+              <div class="ml-4">
+                <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 whitespace-nowrap text-sm text-gray-800 font-medium">{{ product.price | currency:'BRL' }}</td>
+          <td class="p-4 whitespace-nowrap text-center">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
+                  [ngClass]="product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+              {{ product.isActive ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+          <td class="p-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+            <button (click)="openEditModal(product)" class="text-indigo-600 hover:text-indigo-900">Editar</button>
+            <button *ngIf="product.isActive" (click)="onDeactivate(product.id)" class="text-red-600 hover:text-red-900">Desativar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para Adicionar/Editar Produto -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-xl p-8 m-4 max-w-lg w-full">
+    <h2 class="text-xl font-bold mb-4">{{ isEditMode ? 'Editar Produto' : 'Adicionar Novo Produto' }}</h2>
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Campos do Formulário -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Nome do Produto</label>
+        <input type="text" formControlName="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+      </div>
+      <div>
+        <label for="price" class="block text-sm font-medium text-gray-700">Preço (R$)</label>
+        <input type="number" formControlName="price" id="price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+      </div>
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+        <textarea formControlName="description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+      </div>
+       <div>
+        <label for="imageUrl" class="block text-sm font-medium text-gray-700">URL da Imagem</label>
+        <input type="text" formControlName="imageUrl" id="imageUrl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+      </div>
+      <div *ngIf="isEditMode" class="flex items-center">
+        <input type="checkbox" formControlName="isActive" id="isActive" class="h-4 w-4 rounded border-gray-300 text-teal-600">
+        <label for="isActive" class="ml-2 block text-sm text-gray-900">Produto Ativo</label>
+      </div>
+
+      <!-- Ações do Modal -->
+      <div class="flex justify-end space-x-3 pt-4">
+        <button type="button" (click)="closeModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md">Cancelar</button>
+        <button type="submit" [disabled]="productForm.invalid" class="bg-teal-500 text-white px-4 py-2 rounded-md disabled:bg-gray-400">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>

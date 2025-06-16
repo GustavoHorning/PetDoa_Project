@@ -51,6 +51,7 @@ namespace PetDoa.Controllers
     public class CreatePaymentRequest
     {
       public decimal Amount { get; set; }
+      public int? ProductId { get; set; }
     }
 
     [HttpPost("checkout")]
@@ -73,6 +74,17 @@ namespace PetDoa.Controllers
           DonorID = donorId,
           OngId = 1 
         };
+
+        if (request.ProductId.HasValue)
+        {
+          var product = await _context.Products.FindAsync(request.ProductId.Value);
+          if (product != null)
+          {
+            donation.ProductId = product.Id;
+            donation.ProductName = product.Name; 
+          }
+        }
+
         _context.Donations.Add(donation);
         await _context.SaveChangesAsync();
 
@@ -97,7 +109,6 @@ namespace PetDoa.Controllers
     [AllowAnonymous]
     public async Task<IActionResult> MercadoPagoWebhook([FromBody] MercadoPagoNotification notification)
     {
-      // Log para sabermos que o webhook foi chamado
       _logger.LogInformation("Webhook do Mercado Pago recebido. Ação: {Action}, Data ID: {DataId}",
           notification?.action, notification?.data?.id);
 
@@ -111,7 +122,6 @@ namespace PetDoa.Controllers
           var client = new PaymentClient();
           Payment payment = await client.GetAsync(paymentId);
 
-          // Log para vermos os detalhes do pagamento que buscamos
           _logger.LogInformation("Pagamento ID {PaymentId} buscado. Status: {Status}, Ref Externa: {ExternalRef}",
               payment?.Id, payment?.Status, payment?.ExternalReference);
 
@@ -124,15 +134,10 @@ namespace PetDoa.Controllers
 
               if (donation != null && donation.Status == DonationStatus.Pending)
               {
-                // --- INÍCIO DAS ALTERAÇÕES ---
-
-                // 1. Atualiza o status para Completo
                 donation.Status = DonationStatus.Completed;
 
-                // 2. Salva o ID do pagamento do Mercado Pago (ex: 114027114899)
                 donation.GatewayPaymentId = payment.Id.ToString();
 
-                // 3. "Traduz" o método de pagamento de texto para o seu Enum numérico
                 PaymentMethod paymentMethodEnum;
                 switch (payment.PaymentTypeId?.ToLower())
                 {
@@ -142,18 +147,16 @@ namespace PetDoa.Controllers
                   case "pix":
                     paymentMethodEnum = PaymentMethod.Pix;
                     break;
-                  case "ticket": // "ticket" é como o Mercado Pago chama o Boleto
+                  case "ticket":
                     paymentMethodEnum = PaymentMethod.Boleto;
                     break;
                   default:
-                    // Um valor padrão caso o método seja desconhecido
                     paymentMethodEnum = PaymentMethod.Outro;
                     break;
                 }
-                // Atribui o valor do Enum (que será salvo como número no banco)
                 donation.Method = paymentMethodEnum;
 
-                // --- FIM DAS ALTERAÇÕES ---
+                //donation.Cpf = payment.Payer.Identification.Number;
 
                 _context.Donations.Update(donation);
                 await _context.SaveChangesAsync();

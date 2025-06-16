@@ -1,0 +1,24 @@
+.kpi-card {
+  @apply bg-white p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-300;
+  
+  &:hover {
+    @apply shadow-xl -translate-y-1;
+  }
+}
+
+.kpi-label {
+  @apply text-sm font-semibold text-gray-500;
+}
+
+.kpi-value {
+  @apply text-3xl font-extrabold text-gray-900 mt-2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}

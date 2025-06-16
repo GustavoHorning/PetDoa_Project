@@ -1,0 +1,41 @@
+<div class="space-y-8">
+  
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900">Dashboard de Administração</h1>
+    <p class="text-lg text-gray-500 mt-1">Visão geral da plataforma PetDoa.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-16">Carregando dados...</div>
+
+  <div *ngIf="!isLoading && dashboardData" class="space-y-8 animate-fade-in">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="kpi-card">
+        <h3 class="kpi-label">Arrecadação Hoje</h3>
+        <p class="kpi-value">{{ dashboardData.stats.revenueToday | currency:'BRL' }}</p>
+      </div>
+      <div class="kpi-card">
+        <h3 class="kpi-label">Arrecadação no Mês</h3>
+        <p class="kpi-value">{{ dashboardData.stats.revenueThisMonth | currency:'BRL' }}</p>
+      </div>
+      <div class="kpi-card">
+        <h3 class="kpi-label">Novos Doadores (Mês)</h3>
+        <p class="kpi-value">{{ dashboardData.stats.newDonorsThisMonth }}</p>
+      </div>
+      <div class="kpi-card">
+        <h3 class="kpi-label">Doações no Mês</h3>
+        <p class="kpi-value">{{ dashboardData.stats.donationsThisMonth }}</p>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Arrecadação nos Últimos 30 Dias</h3>
+      <div class="h-80">
+        <canvas baseChart 
+          [data]="lineChartData"
+          [options]="lineChartOptions"
+          [type]="'line'">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>

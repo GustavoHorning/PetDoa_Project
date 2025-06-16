@@ -1,6 +1,3 @@
-﻿// PetDoa/Services/AdminService.cs
-
-// Adicione os usings necessários
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,27 +9,25 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using PetDoa.Services.Interfaces;
+using PetDoa.Models.Enums;
 
 namespace PetDoa.Services
 {
-    // Faça a classe implementar a interface IAdminService
     public class AdminService : IAdminService
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _config;
         private readonly IPasswordHasher<Administrator> _passwordHasher;
-        private readonly IMapper _mapper; // Injete o IMapper
+        private readonly IMapper _mapper;
 
-        // Atualize o construtor para incluir IMapper
         public AdminService(AppDbContext context, IConfiguration config, IPasswordHasher<Administrator> passwordHasher, IMapper mapper)
         {
             _context = context;
             _config = config;
             _passwordHasher = passwordHasher;
-            _mapper = mapper; // Armazene o mapper
+            _mapper = mapper;
         }
 
-        // --- Método AuthenticateAsync (já existente) ---
         public async Task<AdminLoginResponseDTO?> AuthenticateAsync(AdminLoginDTO dto)
         {
             var admin = await _context.Administrators
@@ -50,8 +45,6 @@ namespace PetDoa.Services
             };
         }
 
-        // --- Implementação dos novos métodos CRUD ---
-
         public async Task<IEnumerable<AdminReadDTO>> GetAdministratorsAsync()
         {
             var admins = await _context.Administrators.ToListAsync();
@@ -67,14 +60,10 @@ namespace PetDoa.Services
 
         public async Task<AdminReadDTO> CreateAdminAsync(CreateAdminApiDTO createDto)
         {
-            // 1. Verificar se a ONG existe
             var ongExists = await _context.ONGs.AnyAsync(o => o.ID == createDto.OngId);
             if (!ongExists)
             {
-                // Lançar exceção ou retornar um resultado indicando erro.
-                // Lançar exceção é comum em serviços quando um pré-requisito falha.
                 throw new ArgumentException($"ONG com ID {createDto.OngId} não encontrada.");
-                // Alternativa: retornar um ServiceResponse com erro.
             }
 
             // 1.1 Verificar se o email já existe (opcional mas recomendado)
@@ -118,8 +107,6 @@ namespace PetDoa.Services
             return true;
         }
 
-
-        // --- Método GenerateJwtToken (privado, já existente) ---
         private string GenerateJwtToken(Administrator admin)
         {
             var role = admin.IsSuperAdmin ? "SuperAdmin" : "Admin";
@@ -139,11 +126,120 @@ namespace PetDoa.Services
                 issuer: jwtSection["Issuer"],
                 audience: jwtSection["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2), // ou leia do config
+                expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+    public async Task<AdminDashboardDto> GetAdminDashboardDataAsync()
+    {
+      var today = DateTime.UtcNow.Date;
+      var startOfMonth = new DateTime(today.Year, today.Month, 1);
+      var startOf30Days = today.AddDays(-29);
+
+      var stats = new AdminDashboardStatsDto
+      {
+        RevenueToday = await _context.Donations
+              .Where(d => d.Status == DonationStatus.Completed && d.Date >= today)
+              .SumAsync(d => (decimal?)d.Amount) ?? 0,
+
+        RevenueThisMonth = await _context.Donations
+              .Where(d => d.Status == DonationStatus.Completed && d.Date >= startOfMonth)
+              .SumAsync(d => (decimal?)d.Amount) ?? 0,
+
+        NewDonorsThisMonth = await _context.Donors
+              .CountAsync(d => d.Registration_Date >= startOfMonth),
+
+        DonationsThisMonth = await _context.Donations
+              .CountAsync(d => d.Status == DonationStatus.Completed && d.Date >= startOfMonth)
+      };
+
+      var recentDonations = await _context.Donations
+        .Where(d => d.Status == DonationStatus.Completed && d.Date >= startOf30Days)
+        .Select(d => new { d.Date, d.Amount }) // Pegamos apenas os campos necessários
+        .ToListAsync();
+
+      // Agora, agrupamos e somamos em memória, o que é mais seguro
+      var dailyRevenue = recentDonations
+          .GroupBy(d => d.Date.Date)
+          .Select(g => new DailyRevenueDto
+          {
+            Date = g.Key.ToString("dd/MM"),
+            Amount = g.Sum(d => d.Amount)
+          })
+          .OrderBy(r => r.Date)
+          .ToList();
+
+      var dashboardData = new AdminDashboardDto
+      {
+        Stats = stats,
+        DailyRevenueLast30Days = dailyRevenue
+      };
+
+      return dashboardData;
     }
+
+
+    public async Task<PaginatedResultDto<AdminDonorListDto>> GetAllDonorsAsync(int pageNumber, int pageSize, string? searchTerm)
+    {
+      // 1. Começamos com a consulta base de todos os doadores
+      var query = _context.Donors.AsQueryable();
+
+      // 2. Se um termo de busca foi fornecido, filtramos por nome ou e-mail
+      if (!string.IsNullOrEmpty(searchTerm))
+      {
+        query = query.Where(d => d.Name.Contains(searchTerm) || d.Email.Contains(searchTerm));
+      }
+
+      // 3. Contamos o total de resultados ANTES de paginar
+      var totalCount = await query.CountAsync();
+
+      // 4. Executamos a consulta, aplicando ordenação e paginação
+      var donors = await query
+          .OrderByDescending(d => d.Registration_Date)
+          .Skip((pageNumber - 1) * pageSize)
+          .Take(pageSize)
+          .Select(d => new AdminDonorListDto
+          {
+            // Mapeamos os dados manualmente para o DTO, incluindo os cálculos
+            Id = d.ID,
+            Name = d.Name,
+            Email = d.Email,
+            RegistrationDate = d.Registration_Date,
+            // Contamos apenas as doações completadas
+            DonationCount = d.Donations.Count(don => don.Status == DonationStatus.Completed),
+            // Somamos apenas o valor das doações completadas
+            TotalDonated = d.Donations.Where(don => don.Status == DonationStatus.Completed).Sum(don => (decimal?)don.Amount) ?? 0
+          })
+          .ToListAsync();
+
+      // 5. Retornamos o resultado paginado
+      return new PaginatedResultDto<AdminDonorListDto>(donors, totalCount, pageNumber, pageSize);
+    }
+
+    public async Task<AdminDonorDetailDto?> GetDonorDetailsAsync(int donorId)
+    {
+      var donor = await _context.Donors
+          .Include(d => d.Donations) // Incluímos o histórico de doações
+              .ThenInclude(don => don.ONG) // E a ONG de cada doação
+          .Where(d => d.ID == donorId)
+          .Select(d => new AdminDonorDetailDto
+          {
+            Id = d.ID,
+            Name = d.Name,
+            Email = d.Email,
+            RegistrationDate = d.Registration_Date,
+            DonationCount = d.Donations.Count(don => don.Status == DonationStatus.Completed),
+            TotalDonated = d.Donations.Where(don => don.Status == DonationStatus.Completed).Sum(don => (decimal?)don.Amount) ?? 0,
+            DonationHistory = _mapper.Map<List<DonationReadDTO>>(d.Donations.OrderByDescending(don => don.Date).ToList())
+          })
+          .FirstOrDefaultAsync();
+
+      return donor;
+    }
+
+
+  }
 }
