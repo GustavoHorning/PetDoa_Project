@@ -1,4 +1,4 @@
-﻿using PetDoa.Models;
+using PetDoa.Models;
 using System.Collections.Generic;
 using System;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +16,7 @@ namespace PetDoa.Data
         public DbSet<Donation> Donations { get; set; }
         public DbSet<ONG> ONGs { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-    }
+  }
 }

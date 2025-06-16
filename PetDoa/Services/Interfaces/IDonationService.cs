@@ -13,11 +13,16 @@ namespace PetDoa.Services.Interfaces
 
         Task<DonationReadDTO?> GetDonationByIdAsync(int id);
 
-        Task<IEnumerable<DonationReadDTO>> GetDonationsByDonorAsync(int donorId);
+        //Task<IEnumerable<DonationReadDTO>> GetDonationsByDonorAsync(int donorId);
 
         Task<bool> DeleteDonationAsync(int id);
 
         Task<DashboardSummaryDto> GetDonationSummaryByDonorAsync(int donorId);
+        Task<PaginatedResultDto<DonationReadDTO>> GetDonationsByDonorAsync(int donorId, int pageNumber, int pageSize);
+        Task<byte[]> GenerateReceiptPdfAsync(int donationId, int donorId);
+        Task<byte[]> GenerateConsolidatedReportPdfAsync(int donorId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<DonationReadDTO>> GetRecentDonationsByDonorAsync(int donorId, int limit);
+
 
   }
 }

@@ -1,83 +1,101 @@
-<section class="cadastro-container">
-  <h2>CADASTRO</h2>
+<!-- cadastro.component.html -->
 
-  <div class="social-login-options">
-    <button type="button" class="google-signup-btn" (click)="signUpWithGoogle()">
-      <img src="assets/icons/logo-google.svg" alt="Google logo" class="google-logo">
-      <span>Cadastrar com Google</span>
-    </button>
+<div class="min-h-screen flex bg-gray-100">
+  
+  <!-- Coluna da Esquerda: Imagem e Mensagem de Boas-vindas -->
+  <div class="hidden lg:flex w-1/2 bg-gray-900 items-center justify-center p-12 text-white relative">
+    <div class="absolute inset-0">
+        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="w-full h-full object-cover opacity-30" alt="Cães felizes">
+    </div>
+    <div class="relative z-10 text-center">
+      <a routerLink="/" class="logo-link mb-8 inline-block">
+        <h1 class="text-4xl font-bold tracking-widest">PET<span class="text-teal-400">DOA</span></h1>
+      </a>
+      <h2 class="text-3xl font-bold leading-tight">Junte-se à nossa comunidade.</h2>
+      <p class="mt-4 text-lg text-gray-300 max-w-md">
+        Ao criar sua conta, você ganha acesso a um painel exclusivo para acompanhar seu impacto, gerenciar doações e receber recibos.
+      </p>
+    </div>
   </div>
 
-  <div class="separator">ou</div>
+  <!-- Coluna da Direita: Formulário de Cadastro -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+    <div class="w-full max-w-md">
+      
+      <h2 class="text-3xl font-bold text-gray-900 mb-2">Crie sua Conta</h2>
+      <p class="text-gray-600 mb-8">
+        Já tem uma conta? <a routerLink="/login" class="font-semibold text-teal-600 hover:text-teal-700">Faça o login aqui</a>.
+      </p>
 
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-    <fieldset>
-      <legend>Preencha seus dados aqui embaixo</legend>
+      <!-- Botão de Login com Google -->
+      <button type="button" class="google-signup-btn" (click)="signUpWithGoogle()">
+        <img src="assets/icons/logo-google.svg" alt="Google logo">
+        <span>Cadastrar com Google</span>
+      </button>
 
-      <div>
-        <div class="input-wrapper">
-          <i class="fas fa-user input-icon"></i>
-          <input type="text" placeholder="Nome Completo" formControlName="fullName">
-        </div>
-        <div *ngIf="f['fullName'].invalid && (f['fullName'].dirty || f['fullName'].touched)" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> 
-          <div *ngIf="f['fullName'].errors?.['required']">Nome completo é obrigatório.</div>
-          <div *ngIf="f['fullName'].errors?.['minlength']">Nome completo deve ter pelo menos 3 caracteres.</div>
-          <div *ngIf="f['fullName'].errors?.['maxlength']">Nome completo não pode exceder 150 caracteres.</div>
-        </div>
-      </div>
+      <div class="separator">ou</div>
 
-      <div>
-        <div class="input-wrapper">
-          <i class="fas fa-envelope input-icon"></i>
-          <input type="email" placeholder="E-mail" formControlName="email">
+      <!-- Formulário -->
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        
+        <!-- Campo Nome Completo -->
+        <div>
+          <label for="fullName" class="form-label">Nome Completo</label>
+          <div class="input-wrapper">
+            <input id="fullName" type="text" placeholder="Seu nome aqui" formControlName="fullName" class="form-input">
+          </div>
+          <div *ngIf="f['fullName'].invalid && (f['fullName'].dirty || f['fullName'].touched)" class="error-message">
+            <div *ngIf="f['fullName'].errors?.['required']">Nome completo é obrigatório.</div>
+            <div *ngIf="f['fullName'].errors?.['minlength']">Deve ter pelo menos 3 caracteres.</div>
+          </div>
         </div>
-        <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> 
-          <div *ngIf="f['email'].errors?.['required']">E-mail é obrigatório.</div>
-          <div *ngIf="f['email'].errors?.['email']">Formato de e-mail inválido.</div>
-          <div *ngIf="f['email'].errors?.['maxlength']">E-mail não pode exceder 256 caracteres.</div>
-        </div>
-      </div>
 
-      <div>
-        <div class="input-wrapper">
-          <i class="fas fa-lock input-icon"></i>
-          <input type="password" placeholder="Senha" formControlName="password">
+        <!-- Campo E-mail -->
+        <div>
+          <label for="email" class="form-label">E-mail</label>
+          <div class="input-wrapper">
+            <input id="email" type="email" placeholder="seuemail@exemplo.com" formControlName="email" class="form-input">
+          </div>
+          <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
+            <div *ngIf="f['email'].errors?.['required']">E-mail é obrigatório.</div>
+            <div *ngIf="f['email'].errors?.['email']">Formato de e-mail inválido.</div>
+          </div>
         </div>
-        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="error-message">
-          <i class="fas fa-exclamation-circle"></i> 
-          <div *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</div>
-          <div *ngIf="f['password'].errors?.['minlength']">Senha deve ter pelo menos 8 caracteres.</div>
+        
+        <!-- Campo Senha -->
+        <div>
+          <label for="password" class="form-label">Senha</label>
+          <div class="input-wrapper">
+            <input id="password" type="password" placeholder="Mínimo de 8 caracteres" formControlName="password" class="form-input">
+          </div>
+           <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="error-message">
+            <div *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</div>
+            <div *ngIf="f['password'].errors?.['minlength']">A senha deve ter pelo menos 8 caracteres.</div>
+          </div>
         </div>
-      </div>
 
-     <div>
-  <div class="input-wrapper">
-    <i class="fas fa-lock input-icon"></i>
-    <input type="password" placeholder="Confirmar Senha" formControlName="confirmPassword">
-  </div>
+        <!-- Campo Confirmar Senha -->
+        <div>
+          <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+          <div class="input-wrapper">
+            <input id="confirmPassword" type="password" placeholder="Repita sua senha" formControlName="confirmPassword" class="form-input">
+          </div>
+          <div *ngIf="registrationForm.errors?.['mismatch'] && f['confirmPassword'].touched" class="error-message">
+            As senhas não coincidem.
+          </div>
+        </div>
 
-  <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || f['confirmPassword'].touched)" class="error-message">
-    <i class="fas fa-exclamation-circle"></i>
-    
-    <span *ngIf="f['confirmPassword'].errors?.['required']">Confirmação de senha é obrigatória.</span>
-    
-    <span *ngIf="f['confirmPassword'].errors?.['mismatch']">As senhas não coincidem.</span>
-    
+        <!-- Mensagens da API -->
+        <div *ngIf="successMessage" class="api-success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="api-error-message">{{ errorMessage }}</div>
+        
+        <!-- Botão de Envio -->
+        <button type="submit" [disabled]="registrationForm.invalid || isLoading" class="submit-button">
+          <span *ngIf="!isLoading">Criar Minha Conta</span>
+          <span *ngIf="isLoading">Aguarde...</span>
+        </button>
+
+      </form>
+    </div>
   </div>
 </div>
-    
-    </fieldset>
-
-    <div *ngIf="successMessage" class="api-success-message"> {{ successMessage }}
-    </div>
-    <div *ngIf="errorMessage" class="api-error-message"> {{ errorMessage }}
-    </div>
-
-    <button type="submit" [disabled]="isLoading">
-      <span *ngIf="!isLoading">CONFIRMAR</span>
-      <span *ngIf="isLoading">Aguarde...</span>
-    </button>
-  </form>
-</section>

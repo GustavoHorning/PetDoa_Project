@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { AuthService } from '../core/services/auth.service';
 import { RegisterDonorDto } from '../core/models/register-donor.dto'; 
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
   imports: [
     CommonModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss'] 

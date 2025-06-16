@@ -12,6 +12,8 @@ using System.Text.Json.Serialization;
 using PetDoa.Handlers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using QuestPDF.Infrastructure;
+
 
 namespace PetDoa
 {
@@ -21,19 +23,21 @@ namespace PetDoa
         {
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var builder = WebApplication.CreateBuilder(args);
+            QuestPDF.Settings.License = LicenseType.Community;
 
 
-            //builder.Services.AddControllers();
-            builder.Services.AddControllers().AddJsonOptions(options =>
+
+      //builder.Services.AddControllers();
+      builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
             builder.Services.AddCors(options =>
             {
-              options.AddPolicy(name: MyAllowSpecificOrigins,
-                                policy =>
+              options.AddPolicy(name: "AllowAngularApp",
+                                builder =>
                                 {
-                                  policy.WithOrigins("http://localhost:4200")
+                                  builder.WithOrigins("http://localhost:4200")
                                     .AllowAnyHeader()
                                     .AllowAnyMethod();
                                 });
@@ -104,13 +108,21 @@ namespace PetDoa
                 string? clientId = googleAuthNSection["ClientId"];
                 string? clientSecret = googleAuthNSection["ClientSecret"];
 
-                if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+
+              if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
                 {
                     throw new InvalidOperationException("Credenciais do Google (ClientId ou ClientSecret) não configuradas.");
                 }
 
                 options.ClientId = clientId;
                 options.ClientSecret = clientSecret;
+
+              options.Events.OnRedirectToAuthorizationEndpoint = context =>
+              {
+                // Adicionamos o nosso parâmetro aqui de forma segura
+                context.Response.Redirect(context.RedirectUri + "&prompt=select_account");
+                return Task.CompletedTask;
+              };
             }).AddCookie(IdentityConstants.ExternalScheme);
             //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -119,26 +131,27 @@ namespace PetDoa
             var app = builder.Build();
             app.UseExceptionHandler();
 
-            // Criar o banco de dados e rodar o seeder durante a inicialização
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    var seeder = services.GetRequiredService<AdminSeeder>();
+      //Criar o banco de dados e rodar o seeder durante a inicialização
+      //      using (var scope = app.Services.CreateScope())
+      //{
+      //  var services = scope.ServiceProvider;
+      //  var seeder = services.GetRequiredService<AdminSeeder>();
 
-            //    // Popula os administradores
-            //    seeder.SeedSuperAdmins();
-            //}
+      //  // Popula os administradores
+      //  seeder.SeedSuperAdmins();
+      //}
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+      // Configure the HTTP request pipeline.
+      if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            //app.UseCors(MyAllowSpecificOrigins);
+      app.UseCors("AllowAngularApp");
 
-            app.UseAuthentication();
+      app.UseAuthentication();
             app.UseAuthorization();
 
 

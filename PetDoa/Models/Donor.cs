@@ -22,6 +22,9 @@ namespace PetDoa.Models
         public DateTime Registration_Date { get; set; } = DateTime.Now;
         public string? ProfilePictureUrl { get; set; }
 
+    public virtual ICollection<Donation> Donations { get; set; }
+
+
 
   }
 }

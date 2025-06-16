@@ -1,103 +1,188 @@
-<section class="hero">
-  <div class="hero-content">
-    <h2>Transforme seu PIX em amor, alimento e proteção para animais.</h2>
-    <button class="cta-button">CADASTRA-SE AGORA MESMO</button>
-  </div>
-</section>
-
-<section class="como-ajudar">
-  <div class="card destaque">
-    <i class="fas fa-hands-helping icon"></i>
-    <h3>Como ajudar?</h3>
-    <p>Você pode transformar a realidade de dezenas de animais com sua contribuição. A solidariedade muda vidas!</p>
-    <button class="btn amarelo">Saiba como</button>
-  </div>
-
-  <div class="card">
-    <i class="fas fa-hand-holding-usd icon"></i>
-    <h3>Faça uma doação pontual</h3>
-    <p>Qualquer valor pode significar um prato de ração ou um tratamento veterinário completo.</p>
-    <button class="btn verde">Quero doar</button>
-  </div>
-
-  <div class="card">
-    <i class="fas fa-sync-alt icon"></i>
-    <h3>Seja um doador fixo</h3>
-    <p>Ajude mensalmente e nos ajude a garantir cuidados constantes para nossos resgatados.</p>
-    <button class="btn amarelo">Apoiar sempre</button>
-  </div>
-</section>
-
-<section class="nossa-historia">
-  <div class="historia-imagem">
-    <img src="../../assets/icons/abraco-cachorro.png" alt="Mulher abraçando cachorro">
-    <div class="destaque-resgate">
-      <strong>+ de 40.000</strong>
-      <span>ANIMAIS ASSISTIDOS</span>
+<section class="relative h-screen flex items-center justify-center text-center text-white overflow-hidden">
+  <!-- <video playsinline autoplay muted loop poster="../../assets/video/cachorroCorrendo.mp4" 
+         class="absolute z-0 top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2">
+    <source src="../../assets/video/cachorroCorrendo.mp4" type="video/mp4">
+    Seu navegador não suporta o vídeo.
+  </video> -->
+  <video playsinline autoplay muted loop
+    class="absolute top-0 left-0 w-full h-full object-cover">
+    <source src="../../assets/video/cachorroCorrendo.mp4" type="video/mp4">
+    Seu navegador não suporta o vídeo.
+  </video>
+  
+  <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10"></div>
+  
+  <div class="z-20 p-4 animate-fade-in-up">
+    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-4">
+      Sua doação <span class="text-teal-400">salva vidas.</span>
+    </h1>
+    <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-200 mb-8">
+      Conectamos doadores apaixonados como você a animais resgatados que precisam de uma segunda chance. Seja parte dessa mudança.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+      <a routerLink="/quero-ajudar" class="px-8 py-4 bg-teal-500 text-white font-bold rounded-lg shadow-lg hover:bg-teal-600 transition-all duration-300 transform hover:scale-105">
+        Quero Ajudar Agora
+      </a>
+      <a (click)="scrollToSection('como-ajudar')" class="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-black transition-colors duration-300">
+        Ver Formas de Ajudar
+      </a>
     </div>
   </div>
-
-  <div class="historia-conteudo">
-    <h2>Conheça Nossa História</h2>
-    <p>
-      Fundada em 2015 com a missão de desburocratizar
-      a forma de financiar e proteger animais em situação de risco,
-      o PetDoa conecta pessoas que se importam a quem mais precisa de ajuda.
-      Com sua contribuição, centenas de vidas já foram transformadas.
-    </p>
-    <p>
-      Nosso sistema de contribuição foi criado para conectar pessoas dispostas a ajudar com quem cuida de animais em situação de vulnerabilidade.
-      Por meio do Petdoa, você faz uma doação que é direcionada a ONGs e protetores independentes cadastrados e verificados. Esses recursos ajudam diretamente com alimentação, castrações, tratamentos veterinários e acolhimento de animais resgatados das ruas.
-      Transparente e acessível, o Petdoa permite doações únicas ou mensais, com a certeza de que cada contribuição representa um ato real de amor.
-    </p>
-    <ul>
-      <li><i class="fas fa-check-circle"></i> Acreditamos no fim do abandono</li>
-      <li><i class="fas fa-check-circle"></i> Lutamos pela proteção animal</li>
-      <li><i class="fas fa-check-circle"></i> Todo mundo pode ajudar</li>
-    </ul>
-    <button class="btn roxo">Fazer Parte desse Projeto</button>
+  
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
   </div>
 </section>
-
-
-<section class="financiamento">
-  <h2>💚 Por que apoiar financeiramente o PetDoa?</h2>
-  <p>
-    O PetDoa nasceu com a missão de conectar corações solidários com instituições que realmente cuidam dos animais.
-    Ao contribuir financeiramente, você fortalece a estrutura dessas ONGs, permitindo que mais vidas sejam resgatadas, tratadas e encaminhadas para adoção responsável.
-    Cada doação importa — e transforma realidades.
-  </p>
-</section>
-
-
-<section class="transparencia-v2">
-  <div class="transparencia-texto">
-    <h2>TRANSPARÊNCIA</h2>
-    <p>Confira a Prestação de Contas de nosso Instituto:</p>
-
-    <div class="transparencia-metricas">
-      <div>
-        <span class="contador" data-target="4500">0</span><br />
-        ANIMAIS ADOTADOS
+<section id="como-ajudar" class="py-20 bg-gray-100">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold text-gray-800 mb-2">Você Transforma Realidades</h2>
+    <p class="text-lg text-gray-600 mb-12">Escolha a forma de ajudar que mais toca seu coração.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="card-ajuda animate-card-fly-in" style="--delay: 0.1s;">
+        <div class="card-icon-ajuda bg-teal-100 text-teal-600"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg></div>
+        <h3 class="text-2xl font-bold mb-3">Doe Itens Essenciais</h3>
+        <p class="text-gray-600 mb-6">Compre ração, vacinas e cobertores que vão direto para nossos animais na nossa lojinha solidária.</p>
+        <a routerLink="/quero-ajudar" class="card-link-ajuda">Visitar Lojinha &rarr;</a>
       </div>
-      <div>
-        <span class="contador" data-target="12800">0</span><br />
-         QUILOS DE RAÇÃO DOADOS
+      <div class="card-ajuda animate-card-fly-in" style="--delay: 0.2s;">
+        <div class="card-icon-ajuda bg-sky-100 text-sky-600"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
+        <h3 class="text-2xl font-bold mb-3">Faça uma Doação Livre</h3>
+        <p class="text-gray-600 mb-6">Qualquer valor nos ajuda a cobrir custos emergenciais e tratamentos veterinários complexos.</p>
+        <a routerLink="/quero-ajudar" class="card-link-ajuda">Doar Qualquer Valor &rarr;</a>
       </div>
-      <div>
-        <span class="contador" data-target="2860000">0</span><br />
-        EM VALORES DOADOS (R$)
-      </div>
-      <div>
-        <span class="contador" data-target="3200">0</span><br />
-        ANIMAIS CASTRADOS
+      <div class="card-ajuda animate-card-fly-in" style="--delay: 0.3s;">
+        <div class="card-icon-ajuda bg-amber-100 text-amber-600"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+        <h3 class="text-2xl font-bold mb-3">Seja um Anjo Mensal</h3>
+        <p class="text-gray-600 mb-6">Com doações recorrentes, você se torna um pilar do nosso trabalho e garante cuidado contínuo.</p>
+        <a routerLink="/quero-ajudar" class="card-link-ajuda">Saber Mais &rarr;</a>
       </div>
     </div>
-
-  </div>
-
-  <div class="transparencia-img">
-    <img src="assets/img/bg-transparencia-gato.png" alt="Gato com olhos verdes" />
   </div>
 </section>
 
+<section id="sobre-nos" class="py-20 bg-white">
+  <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+    <div>
+      <img src="https://images.pexels.com/photos/6235233/pexels-photo-6235233.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Voluntária cuidando de um cachorro resgatado" class="rounded-2xl shadow-2xl w-full">
+    </div>
+    <div class="animate-fade-in">
+      <h2 class="text-sm font-bold text-teal-600 uppercase tracking-widest">Nossa Missão</h2>
+      <p class="mt-2 text-4xl font-bold text-gray-800">Mais que uma Causa, um Compromisso com a Vida</p>
+      <p class="mt-4 text-gray-600 text-lg leading-relaxed">
+        A PetDoa nasceu em 2015, não apenas como uma plataforma, mas como um movimento. Acreditamos que a tecnologia pode ser a ponte que faltava entre um coração generoso e uma vida que precisa de ajuda. Nosso trabalho é garantir que essa ponte seja segura, transparente e eficiente.
+      </p>
+      <p class="mt-4 text-gray-600 text-lg leading-relaxed">
+        Cada doação é mais que um valor: é o tratamento que cura, a ração que alimenta a esperança e o cobertor que aquece em uma noite fria. Lutamos por um futuro onde todo animal tenha a chance de conhecer o calor de um lar.
+      </p>
+    </div>
+  </div>
+</section>
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+    <div class="order-2 md:order-1 animate-fade-in">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Acreditamos que todo final pode ser feliz.</h2>
+      <p class="text-gray-600 mb-6 text-lg">
+        Fundada em 2015, a PetDoa nasceu para conectar corações solidários a quem mais precisa de ajuda. Cada doação que recebemos é auditada e revertida em alimentação, castrações, vacinas e na busca por um lar amoroso e definitivo.
+      </p>
+      <div class="grid grid-cols-2 gap-8 mt-10 text-center">
+        <div>
+          <span #counter [attr.data-target]="stats.animalsAdopted" class="text-5xl font-extrabold text-teal-500">0</span>
+          <p class="text-sm font-semibold text-gray-500 mt-1 tracking-wider">ANIMAIS ADOTADOS</p>
+        </div>
+        <div>
+          <span #counter [attr.data-target]="stats.foodDonatedInKg" class="text-5xl font-extrabold text-teal-500">0</span>
+          <p class="text-sm font-semibold text-gray-500 mt-1 tracking-wider">KG DE RAÇÃO</p>
+        </div>
+        <div>
+          <span #counter [attr.data-target]="stats.totalDonated" class="text-5xl font-extrabold text-teal-500">0</span>
+          <p class="text-sm font-semibold text-gray-500 mt-1 tracking-wider">REAIS ARRECADADOS</p>
+        </div>
+        <div>
+          <span #counter [attr.data-target]="stats.animalsNeutered" class="text-5xl font-extrabold text-teal-500">0</span>
+          <p class="text-sm font-semibold text-gray-500 mt-1 tracking-wider">ANIMAIS CASTRADOS</p>
+        </div>
+      </div>
+    </div>
+    <div class="order-1 md:order-2">
+      <img src="../../assets/img/cachorroFeliz.jpg" alt="Cachorro feliz sendo abraçado" class="rounded-2xl shadow-2xl w-full">
+    </div>
+  </div>
+</section>
+<section class="py-20 bg-gray-100">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-800 mb-2">As Vozes da Nossa Causa</h2>
+      <p class="text-lg text-gray-600">O que nossa comunidade tem a dizer.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let testimonial of testimonials" class="bg-white rounded-xl shadow-lg p-8 relative">
+        <svg class="w-16 h-16 text-teal-100 absolute top-4 right-4" fill="currentColor" viewBox="0 0 32 32"><path d="M9.33,12.44C11.93,12.44,14,10.37,14,7.77S11.93,3.1,9.33,3.1,4.66,5.17,4.66,7.77,6.73,12.44,9.33,12.44Zm-1,1-1,1.52A15.86,15.86,0,0,0,2.1,28.8H5.73A12.35,12.35,0,0,1,8.33,20Z"></path><path d="M22.67,12.44C25.27,12.44,27.33,10.37,27.33,7.77S25.27,3.1,22.67,3.1,18,5.17,18,7.77,20.07,12.44,22.67,12.44Zm-1,1-1,1.52A15.86,15.86,0,0,0,15.43,28.8H19A12.35,12.35,0,0,1,21.67,20Z"></path></svg>
+        <p class="text-gray-600 italic text-lg leading-relaxed z-10 relative">"{{ testimonial.quote }}"</p>
+        <div class="flex items-center mt-6 pt-6 border-t border-gray-200">
+          <img [src]="testimonial.imageUrl" [alt]="testimonial.name" class="w-14 h-14 rounded-full">
+          <div class="ml-4">
+            <p class="font-bold text-gray-900">{{ testimonial.name }}</p>
+            <p class="text-sm text-teal-600 font-semibold">{{ testimonial.role }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-sm font-bold text-teal-600 uppercase tracking-widest">Apoio que Transforma</h2>
+    <p class="mt-2 text-3xl font-bold text-gray-800">Somos gratos aos parceiros que caminham ao nosso lado.</p>
+      <div class="mt-12 flex flex-wrap justify-center items-center gap-x-8 gap-y-6 sm:gap-x-12 sm:gap-y-8 md:gap-x-16">
+      <img *ngFor="let partner of partners" [src]="partner.logoUrl" [alt]="partner.name" class="h-10 sm:h-12 grayscale opacity-70 hover:opacity-100 hover:grayscale-0 transition-all duration-300">
+    </div>
+  </div>
+</section>
+<footer class="bg-gray-900 text-gray-400">
+  <div class="container mx-auto px-6 py-16">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
+            <div class="md:col-span-1">
+        <h3 class="text-2xl font-bold text-white tracking-widest">PET<span class="text-teal-400">DOA</span></h3>
+        <p class="mt-4 text-sm leading-relaxed">
+          Conectando corações solidários a animais que precisam de uma segunda chance. Juntos, transformamos o abandono em amor.
+        </p>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold uppercase tracking-wider">Navegue</h4>
+        <nav class="mt-4 flex flex-col space-y-3">
+          <a (click)="scrollToSection('sobre-nos')" class="footer-link cursor-pointer">Sobre Nós</a>
+          <a [routerLink]="isUserLoggedIn ? '/loja' : '/quero-ajudar'" class="footer-link">Lojinha Solidária</a>
+          <a routerLink="/contato" class="footer-link">Contato</a>
+          <a routerLink="/faq" class="footer-link">Dúvidas Frequentes</a>
+        </nav>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold uppercase tracking-wider">Contato</h4>
+        <div class="mt-4 space-y-3">
+          <p>contato&#64;petdoa.com.br</p>
+          <p>(41) 98765-1234</p>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold uppercase tracking-wider">Siga-nos</h4>
+        <div class="flex space-x-4 mt-4">
+          <a href="#" aria-label="Facebook" class="social-icon">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.323-1.325z"></path></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="social-icon">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.148 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"></path></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="social-icon">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616v.064c0 2.298 1.634 4.212 3.791 4.649-.69.188-1.452.23-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.588-7.52 2.588-.49 0-.974-.03-1.455-.086 2.679 1.728 5.86 2.746 9.282 2.746 11.133 0 17.22-9.219 17.22-17.22 0-.263-.006-.525-.018-.787a12.334 12.334 0 003.04-3.153z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-12 border-t border-gray-800 pt-8 text-center text-sm">
+      <p>&copy; 2025 PetDoa. Todos os direitos reservados. Feito com ❤️ por um apaixonado por pets.</p>
+    </div>
+  </div>
+</footer>

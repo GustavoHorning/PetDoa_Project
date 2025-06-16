@@ -1,270 +1,142 @@
-.cadastro-container
-{
-    max-width: 600px;
-    margin: 4rem auto;
-    background: #ffffff;
-    padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
-    text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-    h2 {
-        color: #004f35;
-        font-size: 2rem;
-        margin-bottom: 1,5rem;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    form{
-        display: flex;
-        flex-direction: column;
-    }
-
-    fieldset {
-        border: none;
-        padding: 0;
-        margin: 0 0 1.5rem 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    legend {
-        text-align: center;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #004f35;
-        margin-bottom: 1rem;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    input {
-        padding: 1.0rem 3.5rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-family: 'Poppins', sans-serif;
-        transition: border 0.3s ease;
-        padding-left: 2.8rem;
-        width: 100%;
-        box-sizing: border-box;
-
-        &:focus {
-            border-color: #004f35;
-            outline: none;
-        }   
-    }
-
-    button{
-        margin-top: 1rem;
-        background-color: #004f35;
-        color: #fff;
-        padding: 0.9rem;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 1rem;
-        font-family: 'Poppins', sans-serif;
-        cursor: pointer;
-        transition: background-color 0,3s ease;
-
-        &:hover{
-            background-color: #033e2b;
-            color: #F4D35E;
-        }
-    }
-
-    .social-login-cadastro { 
-            button.google-btn {
-            background-color: #dd4b39;
-            color: white;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%; 
-            margin-bottom: 1rem;
-
-            &:hover {
-                background-color: #c23321;
-            }
-
-            i.fab.fa-google { 
-            margin-right: 8px;
-            }
-        }
-    }
-
-    .social-login-options {
-    margin-bottom: 1.5rem; 
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    }
-
-    .google-signup-btn {
-        display: inline-flex; 
-        align-items: center; 
-        justify-content: center; 
-
-        background-color: #ffffff; 
-        color: rgba(0, 0, 0, 0.54);
-        border: 1px solid #dadce0; 
-        border-radius: 4px; 
-        padding: 20px 34px; 
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.25px;
-        cursor: pointer;
-        transition: background-color .3s, box-shadow .3s;
-        width: 100%; 
-        min-width: 200px; 
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
-
-        &:hover {
-            background-color: #f8f9fa;
-            border-color: #c6cace;
-            box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
-        }
-
-        &:active {
-            background-color: #ebebeb;
-        }
-
-        .google-logo {
-            width: 18px;
-            height: 18px;
-            margin-right: 12px; 
-        }
-    }
-
-    .separator {
-    text-align: center;
-    margin: 1rem 0;
-    color: #888;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-        &::before, &::after {
-            content: '';
-            flex-grow: 1;
-            background-color: #e0e0e0;
-            height: 1px;
-            margin: 0 10px;
-        }
-    }
-    
-    .input-wrapper {
-    position: relative; 
-    width: 100%;
-
-        .input-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%); 
-            color: #aaa;
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-    } 
+// Variáveis de Cor
+:host {
+  --primary-color: #0d9488; // Teal 600
+  --primary-hover: #0f766e; // Teal 700
+  --error-color: #dc2626; // Red 600
+  --success-color: #166534; // Green 800
+  --form-bg: #f9fafb;     // Gray 50
+  --border-color: #d1d5db; // Gray 300
+  --focus-ring: #a7f3d0;  // Green 200
 }
 
+// Estilo Geral da Coluna do Formulário
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151; // text-gray-700
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #111827; // text-gray-900
+  background-color: var(--form-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &::placeholder {
+    color: #9ca3af; // text-gray-400
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+}
 
 .error-message {
-  color: red;
-  font-size: 0.875em;
-  text-align: left;
+  color: var(--error-color);
+  font-size: 0.8rem;
   margin-top: 0.25rem;
-  margin-left: 0.1rem; 
 }
 
+// Botão Google
+.google-signup-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-input.ng-invalid.ng-touched {
-  border-color: red;
+  img {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background-color: #f9fafb; // Gray 50
+  }
 }
 
-.message-box {
-    padding: 0.8rem 1rem;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    text-align: center;
-    border: 1px solid transparent;
+// Separador "ou"
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #6b7280; // text-gray-500
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+  }
+  &::before { margin-right: 0.5em; }
+  &::after { margin-left: 0.5em; }
+}
+
+// Botão Principal de Submissão
+.submit-button {
+  width: 100%;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Mensagens de Sucesso/Erro da API
+.api-success-message, .api-error-message {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: 500;
 }
 
 .api-success-message {
-    @extend .message-box;
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
+  background-color: #d1fae5; // green-100
+  color: var(--success-color);
 }
 
-.api-error-message { 
-    @extend .message-box;
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
+.api-error-message {
+  background-color: #fee2e2; // red-100
+  color: var(--error-color);
 }
-
-form .error-message {
-  color: red;
-  font-size: 0.875em;
-  text-align: center; 
-  margin-top: 0.4rem; 
-  margin-bottom: 0.5rem; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  gap: 0.3rem; 
-}
-
-form .error-message .fas.fa-exclamation-circle { 
-  color: red;
-  font-size: 1.5em;
-}
-
-
-.input-wrapper {
-    position: relative;
-    width: 100%;
-    // Aplicar o estilo visual do input ao wrapper
-    padding: 0; // O padding real vai no input interno para alinhar com o ícone
-    border: 1px solid #ccc;
-    border-radius: 4px; // <--- BORDER RADIUS AQUI TAMBÉM
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    display: flex; // Para alinhar o ícone e o input interno
-    align-items: center; // Alinha verticalmente
-
-    &:focus-within { // Estilo de foco para o wrapper
-        border-color: #004f35;
-        outline: none; // Ou um box-shadow para simular outline
-    }
-
-    .input-icon {
-      // ... (como antes)
-      left: 1rem;
-      color: #aaa;
-    }
-    input { // Input dentro do wrapper
-      flex-grow: 1; // Para ocupar o espaço restante
-      padding: 0.9rem 1rem 0.9rem 2.8rem; // top/right/bottom/left (com espaço para ícone)
-      border: none; // Borda fica no wrapper
-      border-radius: 0; // Cantos internos retos
-      outline: none; // Outline fica no wrapper
-      background-color: transparent; // Para não cobrir o fundo do wrapper
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      width: 100%; // Para garantir que o flex-grow funcione bem
-    }
-  }
 
 
 

@@ -1,59 +1,109 @@
-<section class="login-container">
-  <div class="form-box">
-    <h2>Entrar na sua conta</h2>
-    <p>Acesse com seus dados para continuar</p>
-
-    <div class="social-login">
-      <button type="button" class="google" (click)="signInWithGoogle()" [disabled]="isLoading">
-        <img src="assets/icons/logo-google.svg" alt="Google logo" class="google-logo" style="width: 18px; height: 18px; margin-right: 8px;">
-        <span>Login com Google</span>
-      </button>
+<div class="min-h-screen flex bg-gray-50 font-sans">
+  
+  <!-- Coluna da Direita (visível em telas grandes): Imagem e Mensagem -->
+  <div class="hidden lg:flex w-1/2 bg-gray-900 items-center justify-center p-12 text-white relative">
+    <div class="absolute inset-0">
+        <!-- Nova imagem que transmite tranquilidade e conexão -->
+        <img src="https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="w-full h-full object-cover opacity-30" alt="Pessoa fazendo carinho em um cachorro">
     </div>
+    <div class="relative z-10 text-center">
+      <a routerLink="/" class="logo-link mb-8 inline-block">
+        <h1 class="text-4xl font-bold tracking-widest">PET<span class="text-teal-400">DOA</span></h1>
+      </a>
+      <h2 class="text-3xl font-bold leading-tight">Bem-vindo(a) de volta!</h2>
+      <p class="mt-4 text-lg text-gray-300 max-w-md">
+        Seu apoio contínuo nos ajuda a reescrever histórias e a criar finais felizes.
+      </p>
+    </div>
+  </div>
 
-    <div class="separator">ou</div>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmitEmailPassword()">
-
-      <label for="loginEmail">Email</label>
-      <div class="input-wrapper">
-        <i class="fas fa-envelope input-icon"></i>
-        <input id="loginEmail" type="email" placeholder="Seu e-mail" formControlName="email" />
-      </div>
+  <!-- Coluna da Esquerda: Formulário de Login -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+    <div class="w-full max-w-md">
       
-      <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="field-error-message">
-        <i class="fas fa-exclamation-circle"></i>
-        <span *ngIf="f['email'].errors?.['required']">Email é obrigatório.</span>
-        <span *ngIf="f['email'].errors?.['email']">Formato de e-mail inválido.</span>
+      <div class="text-center lg:text-left">
+          <!-- Título Dinâmico -->
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">
+            {{ isLoginAdmin ? 'Acesso Administrativo' : 'Acesse sua Conta' }}
+          </h2>
+          <p class="text-gray-600 mb-8">
+            <span *ngIf="!isLoginAdmin">
+              Ainda não tem uma conta? <a routerLink="/cadastro" class="font-semibold text-teal-600 hover:text-teal-700 transition-colors">Cadastre-se aqui</a>.
+            </span>
+            <span *ngIf="isLoginAdmin">Use suas credenciais de administrador.</span>
+          </p>
       </div>
 
-      <label for="loginPassword">Senha</label>
-      <div class="input-wrapper">
-        <i class="fas fa-lock input-icon"></i>
-        <input id="loginPassword" type="password" placeholder="Digite sua senha" formControlName="password" />
-      </div>
-
-      
-
-      
-      <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="field-error-message">
-        <i class="fas fa-exclamation-circle"></i>
-        <span *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</span>
-      </div>
-
-      <div *ngIf="errorMessage" class="api-error-message">
-        {{ errorMessage }}
-      </div>
-
-      <button type="submit" class="login-btn" [disabled]="isLoading || loginForm.invalid">
-        <span *ngIf="!isLoading">Entrar</span>
-        <span *ngIf="isLoading">Aguarde...</span>
+      <!-- Botão de Login com Google -->
+      <!-- <button type="button" (click)="signInWithGoogle()" [disabled]="isLoading" class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors font-medium text-gray-700">
+        <img src="assets/icons/logo-google.svg" alt="Google logo" class="w-5 h-5">
+        <span>Entrar com Google</span>
+      </button> -->
+      <button *ngIf="!isLoginAdmin" type="button" (click)="signInWithGoogle()" [disabled]="isLoading" class="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors font-medium text-gray-700">
+        <img src="assets/icons/logo-google.svg" alt="Google logo" class="w-5 h-5">
+        <span>Entrar com Google</span>
       </button>
-    </form>
 
-    <p class="cadastro">Não tem conta? <a routerLink="/cadastro">Cadastre-se</a></p>
-  </div>
+      <!-- Separador -->
+      <div class="my-6 flex items-center">
+        <div class="flex-grow border-t border-gray-300"></div>
+        <span class="flex-shrink mx-4 text-gray-500 text-sm">OU</span>
+        <div class="flex-grow border-t border-gray-300"></div>
+      </div>
 
-  <div class="image-box">
-    <img src="../../assets/icons/doguinhoII.jpg" alt="Cachorro fofo" />
+      <!-- Formulário de Login -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        
+        <!-- Campo E-mail -->
+        <div>
+          <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+            </div>
+            <input id="loginEmail" type="email" placeholder="seuemail@exemplo.com" formControlName="email" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
+          </div>
+          <div *ngIf="f['email'].invalid && f['email'].touched" class="text-red-600 text-xs mt-1">
+            <span *ngIf="f['email'].errors?.['required']">E-mail é obrigatório.</span>
+            <span *ngIf="f['email'].errors?.['email']">Formato de e-mail inválido.</span>
+          </div>
+        </div>
+
+        <!-- Campo Senha -->
+        <div>
+          <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+          <div class="relative">
+             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <input id="loginPassword" type="password" placeholder="Digite sua senha" formControlName="password" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
+          </div>
+          <div *ngIf="f['password'].invalid && f['password'].touched" class="text-red-600 text-xs mt-1">
+            <span *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</span>
+          </div>
+        </div>
+        
+        <!-- Mensagem de Erro da API -->
+        <div *ngIf="errorMessage" class="p-3 bg-red-100 text-red-700 rounded-lg text-center text-sm">
+          {{ errorMessage }}
+        </div>
+        
+        <!-- Botão de Envio -->
+        <button type="submit" [disabled]="isLoading || loginForm.invalid" class="w-full py-3 px-4 bg-teal-500 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300">
+          <span *ngIf="!isLoading">Entrar</span>
+          <span *ngIf="isLoading" class="flex items-center justify-center">
+             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+             Aguarde...
+          </span>
+        </button>
+      </form>
+
+      <div class="text-center mt-8">
+        <a (click)="toggleLoginMode()" class="text-sm text-gray-500 hover:text-teal-600 cursor-pointer font-semibold transition-colors">
+          {{ isLoginAdmin ? 'Entrar como Doador' : 'Entrar como Administrador' }}
+        </a>
+      </div>
+      
+    </div>
   </div>
-</section>
+</div>
